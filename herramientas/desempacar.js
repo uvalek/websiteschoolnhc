@@ -209,7 +209,7 @@ cuerpo = cuerpo.replace('width: 182px; height: 36px; position: absolute; left: 1
 // ------------------------------------------------------------ 3. armar el HTML
 
 // OJO: cuando tengas el dominio definitivo, cambialo aqui y en sitemap.xml.
-const SITIO = 'https://colegio-ninos-heroes.vercel.app';
+const SITIO = 'https://websiteschoolnhc.vercel.app';
 
 const TITULO = 'Colegio Niños Héroes de Chapultepec | Primaria y Secundaria en Apizaco';
 const DESC = 'Colegio privado de primaria y secundaria en Apizaco, Tlaxcala. ' +

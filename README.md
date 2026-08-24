@@ -132,15 +132,18 @@ Faltan dos datos que no inventé:
 
 ## El dominio
 
-Todavía apunta a una dirección provisional. Cuando compres el dominio definitivo,
-hay que cambiarlo en **tres archivos**:
+El sitio vive en **https://websiteschoolnhc.vercel.app** (subdominio gratuito de
+Vercel). Si algún día el colegio compra su propio dominio, hay que cambiarlo en
+**tres archivos**:
 
-- `index.html` → busca `colegio-ninos-heroes.vercel.app` (aparece en `canonical`,
-  en las etiquetas `og:` y en el bloque de Google)
+- `index.html` → busca `websiteschoolnhc.vercel.app` (aparece 7 veces: en
+  `canonical`, en las etiquetas `og:`/`twitter:` y en el bloque de Google)
 - `sitemap.xml`
 - `robots.txt`
 
-Avísame y lo hago de una vez, es un minuto.
+Y en Vercel, agregar el dominio en *Settings → Domains*.
+
+Avísame y lo hago, es un minuto.
 
 ---
 

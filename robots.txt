@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://colegio-ninos-heroes.vercel.app/sitemap.xml
+Sitemap: https://websiteschoolnhc.vercel.app/sitemap.xml
