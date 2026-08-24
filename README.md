@@ -184,7 +184,10 @@ assets/
   icons/        Favicon y iconos
   originales/   Fotos sin comprimir (respaldo, no se publican)
 herramientas/   Scripts con los que se generó todo esto
-vercel.json     Configuración de caché
+vercel.json     Configuración de caché.
+                OJO: es JSON estricto, NO admite comentarios ni claves
+                extra. Vercel rechaza el despliegue si le agregas algo
+                que no esté en su esquema.
 ```
 
 **Peso en celular:** 395 KB para ver la primera pantalla, 941 KB la página completa.

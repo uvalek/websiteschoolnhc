@@ -2,24 +2,21 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
-      "//": "Las fuentes nunca cambian: se guardan un ano en el navegador.",
       "source": "/assets/fonts/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     },
     {
-      "//": "Fotos e iconos: un dia. Si reemplazas una foto con el mismo nombre, los visitantes ven la nueva al dia siguiente como maximo.",
-      "source": "/assets/(img|icons)/(.*)",
+      "source": "/assets/img/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
     },
     {
-      "//": "La pagina y el JS siempre se revisan: los cambios de texto salen al instante.",
-      "source": "/(index.html|script.js)?",
+      "source": "/assets/icons/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
     }
   ]
