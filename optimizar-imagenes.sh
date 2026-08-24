@@ -99,6 +99,18 @@ echo "  fuentes          (se copian tal cual)"
 mkdir -p assets/fonts
 cp -f assets/originales/fonts/*.woff2 assets/fonts/
 
+# ------------------------------------------------- MASCARAS DE CONTRASTE
+# El texto del hero es azul oscuro y las fotos traen una mancha del mismo
+# azul detras. Estas mascaras marcan, pixel por pixel, donde el texto tiene
+# que pintarse de blanco. Si cambias una foto del hero, se regeneran aqui.
+if python3 -c "import PIL, numpy" 2>/dev/null; then
+  echo "  mascaras         (contraste del texto del hero)"
+  python3 herramientas/generar-mascaras.py | tail -n +3 >> "$REPORTE"
+else
+  echo "  AVISO: falta numpy o Pillow, no se regeneraron las mascaras del hero."
+  echo "         Instala con: python3 -m pip install --user pillow numpy"
+fi
+
 # ------------------------------------------------------------- TOTALES
 node -e '
 const fs=require("fs"),p=require("path");

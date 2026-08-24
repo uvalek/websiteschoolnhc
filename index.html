@@ -347,6 +347,28 @@ image-slot#admisiones-foto::part(frame){background:transparent}
 @media (max-width:1024px){.m-only{display:flex !important}.d-only{display:none !important}}
 [hidden]{display:none !important}
 
+/* ---- Contraste del texto del hero sobre las fotos ----
+   El titulo y el parrafo son azul oscuro, y las fotos que van pasando traen
+   una mancha del MISMO azul: donde se encima, el texto se vuelve ilegible.
+
+   Con background-clip:text el texto se pinta con dos capas de fondo en vez
+   de con un color: abajo el color original, y encima una capa blanca
+   recortada por la silueta de las zonas oscuras de la foto. El recorte es
+   por pixel, asi que si el borde parte una letra a la mitad, esa letra queda
+   mitad blanca y mitad azul.
+
+   script.js es quien pone las imagenes y las alinea con la foto. Sin
+   JavaScript esta regla no llega a aplicarse y el texto se ve como siempre. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .contraste-hero.contraste-activo {
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* !important porque tiene que ganarle al color del style="" de la etiqueta */
+    color: transparent !important;
+    background-repeat: no-repeat;
+  }
+}
+
 /* ---- Efectos al pasar el mouse ----
    En el diseño venían como atributo style-hover="..."; aquí son CSS normal.
    Llevan !important porque tienen que ganarle al style="" de cada etiqueta. */
@@ -410,8 +432,8 @@ image-slot#admisiones-foto::part(frame){background:transparent}
 <section id="inicio" data-screen-label="Hero" style="padding:132px 24px 0;background:#fbfcfd">
   <div data-carrusel-pausa data-carrusel-sigue style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(470px,100%),1fr));gap:48px;align-items:stretch">
     <div style="position:relative;z-index:1;max-width:560px;display:flex;flex-direction:column;justify-content:center;padding-bottom:72px">
-      <h1 style="font-size:clamp(38px,5.2vw,60px);line-height:1.06;color:#2f557f;font-weight:700;margin:0;letter-spacing:-.02em">Formamos personas íntegras para la vida</h1>
-      <p style="font-size:clamp(17px,2vw,19px);line-height:1.65;color:#54606f;margin:22px 0 0;max-width:500px">Un colegio donde cada niño y cada adolescente es conocido por su nombre. Acompañamos su aprendizaje y su formación en valores, de lunes a viernes de 8:00 a 14:00.</p>
+      <h1 class="contraste-hero" style="font-size:clamp(38px,5.2vw,60px);line-height:1.06;color:#2f557f;font-weight:700;margin:0;letter-spacing:-.02em">Formamos personas íntegras para la vida</h1>
+      <p class="contraste-hero" style="font-size:clamp(17px,2vw,19px);line-height:1.65;color:#54606f;margin:22px 0 0;max-width:500px">Un colegio donde cada niño y cada adolescente es conocido por su nombre. Acompañamos su aprendizaje y su formación en valores, de lunes a viernes de 8:00 a 14:00.</p>
       <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:34px">
         <a href="https://wa.me/522212018998?text=Hola%2C%20vi%20su%20p%C3%A1gina%20y%20quiero%20informaci%C3%B3n%20sobre%20inscripciones." target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:#2f557f;color:#ffffff;padding:16px 30px;border-radius:999px;font-weight:600;font-size:16px" data-hv="1">Solicita informes</a>
       </div>

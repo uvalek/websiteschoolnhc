@@ -102,6 +102,36 @@ pierde, no se pueden regenerar con otra calidad.
 
 ---
 
+## El texto del hero que cambia de color
+
+El título y el párrafo del inicio son azul oscuro, y las fotos que van pasando por
+detrás traen una mancha del **mismo** azul. Donde se encimaban, el texto desaparecía.
+
+Ahora la página pinta de blanco **solo los pixeles del texto que quedan sobre una zona
+oscura**. El corte sigue la silueta real de la foto: si el borde parte una letra a la
+mitad, media letra queda blanca y media azul.
+
+Funciona así:
+
+1. `herramientas/generar-mascaras.py` mira cada foto del hero y calcula, pixel por
+   pixel, si el fondo va a quedar oscuro o claro. Guarda el resultado en
+   `assets/img/hero-N-mascara.webp`.
+2. `script.js` mide dónde está la foto en pantalla y alinea esa máscara con el texto.
+   Se recalcula al cambiar de foto y al cambiar el tamaño de la ventana.
+
+**Si cambias una foto del hero, corre `./optimizar-imagenes.sh`**: las máscaras se
+regeneran solas junto con las fotos. Si no lo haces, el texto se pintará de blanco en
+los lugares de la foto vieja.
+
+En celular no se activa (ahí la foto va debajo del texto, no detrás) y las máscaras ni
+siquiera se descargan. Sin JavaScript el texto se ve como siempre.
+
+El umbral —cuándo se considera que el fondo es "oscuro"— no es a ojo: sale de la
+fórmula de contraste de la WCAG, en el punto exacto donde el blanco empieza a leerse
+mejor que el azul del texto.
+
+---
+
 ## Poner Facebook e Instagram
 
 Busca `https://www.facebook.com/` (2 veces) y `https://www.instagram.com/` (2 veces)
@@ -180,6 +210,8 @@ index.html      La página completa. Todo el texto vive aquí.
 script.js       Carrusel del hero, menú de celular y testimonios. Nada más.
 assets/
   img/          Fotos optimizadas (las que usa la página)
+                · hero-N-mascara.webp: ver "El texto del hero que cambia
+                  de color" más arriba. NO las borres.
                 · og.jpg es la imagen que sale al compartir por WhatsApp
                 · logo.png es un respaldo del logo en PNG; la página usa
                   logo.webp. Solo haría falta en un dispositivo muy viejo.

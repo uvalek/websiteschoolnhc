@@ -35,6 +35,7 @@ var SEGUNDOS_POR_FOTO = 5;
   var puntos = document.querySelectorAll('[data-punto]');
   var actual = 0;
   var reloj = null;
+  var alPintarFoto = null;   // lo define el módulo de contraste, más abajo
 
   function mostrarFoto(i) {
     actual = (i + diapositivas.length) % diapositivas.length;
@@ -48,6 +49,7 @@ var SEGUNDOS_POR_FOTO = 5;
       puntos[p].style.background = seleccionado ? '#2f557f' : '#c4cfdc';
       puntos[p].setAttribute('aria-current', seleccionado ? 'true' : 'false');
     }
+    if (alPintarFoto) alPintarFoto();
   }
 
   function arrancar() {
@@ -106,6 +108,104 @@ var SEGUNDOS_POR_FOTO = 5;
     document.addEventListener('keydown', function (ev) {
       if (ev.key === 'Escape' && !menu.hidden) { abrirCerrarMenu(false); botonMenu.focus(); }
     });
+  }
+
+  /* --------------- Contraste del texto del hero sobre las fotos ------------
+     El título y el párrafo son azul oscuro, y las fotos que van pasando traen
+     una mancha del MISMO azul detrás: donde se encima, el texto no se lee.
+
+     Aquí se pinta de blanco SOLO los pixeles del texto que quedan sobre una
+     zona oscura. El recorte lo da una máscara generada de cada foto
+     (assets/img/hero-N-mascara.webp), así que el borde sigue la silueta real:
+     si parte una letra a la mitad, media letra queda blanca y media azul.
+
+     La máscara se alinea con la foto midiéndola en pantalla, por eso funciona
+     en cualquier ancho y se recalcula al cambiar el tamaño de la ventana. */
+  var textos = [].slice.call(document.querySelectorAll('.contraste-hero'));
+  var soportaRecorte = window.CSS && CSS.supports &&
+    (CSS.supports('-webkit-background-clip', 'text') || CSS.supports('background-clip', 'text'));
+
+  if (textos.length && diapositivas.length && soportaRecorte) {
+    // Se guarda el color original de cada texto: es la capa de abajo.
+    textos.forEach(function (el) {
+      el.dataset.colorBase = getComputedStyle(el).color;
+    });
+
+    // Dónde queda pintada de verdad la foto dentro de su <img>.
+    // Las fotos usan object-fit:contain y object-position:bottom center, así
+    // que el dibujo no llena la caja: queda centrado y pegado abajo.
+    function zonaPintada(img) {
+      var r = img.getBoundingClientRect();
+      // Las medidas salen de los atributos width/height del HTML, no de
+      // naturalWidth: así el cálculo funciona aunque la foto todavía no se
+      // haya terminado de descargar.
+      var anN = parseFloat(img.getAttribute('width')) || img.naturalWidth;
+      var alN = parseFloat(img.getAttribute('height')) || img.naturalHeight;
+      if (!anN || !alN || !r.width || !r.height) return null;
+      var escala = Math.min(r.width / anN, r.height / alN);   // object-fit: contain
+      var an = anN * escala, al = alN * escala;
+      // object-position: bottom center
+      return { x: r.left + (r.width - an) / 2, y: r.top + (r.height - al), an: an, al: al };
+    }
+
+    function pintarContraste() {
+      var img = diapositivas[actual] && diapositivas[actual].querySelector('img');
+      var z = img ? zonaPintada(img) : null;
+      var mascara = img ? img.currentSrc || img.src : '';
+      mascara = mascara.replace(/hero-(\d)(-900)?\.webp.*$/, 'hero-$1-mascara.webp');
+
+      textos.forEach(function (el) {
+        var base = el.dataset.colorBase;
+        var fondoLiso = 'linear-gradient(' + base + ',' + base + ')';
+        var r = el.getBoundingClientRect();
+        // ¿La foto llega a tocar este texto? En celular no lo toca, y así
+        // además el navegador ni siquiera descarga la máscara.
+        var toca = z && z.x < r.right && z.x + z.an > r.left &&
+                        z.y < r.bottom && z.y + z.al > r.top;
+        if (!toca) {
+          el.classList.remove('contraste-activo');
+          el.style.backgroundImage = '';
+          return;
+        }
+        precargarMascaras();
+        el.style.backgroundImage = 'url("' + mascara + '"), ' + fondoLiso;
+        el.style.backgroundSize = z.an + 'px ' + z.al + 'px, auto';
+        el.style.backgroundPosition = (z.x - r.left) + 'px ' + (z.y - r.top) + 'px, 0 0';
+        el.classList.add('contraste-activo');
+      });
+    }
+
+    // Se descargan las tres máscaras en cuanto se sabe que el efecto aplica.
+    // Si no, al cambiar de foto el texto se vería un instante en azul sobre la
+    // mancha azul, hasta que llegara la máscara nueva.
+    var precargadas = false;
+    function precargarMascaras() {
+      if (precargadas) return;
+      precargadas = true;
+      diapositivas.forEach(function (d) {
+        var im = d.querySelector('img');
+        if (!im) return;
+        var url = (im.currentSrc || im.src).replace(/hero-(\d)(-900)?\.webp.*$/, 'hero-$1-mascara.webp');
+        if (url.indexOf('mascara') !== -1) new Image().src = url;
+      });
+    }
+
+    alPintarFoto = pintarContraste;
+
+    var reloj2 = null;
+    addEventListener('resize', function () {
+      clearTimeout(reloj2);
+      reloj2 = setTimeout(pintarContraste, 120);
+    });
+    diapositivas.forEach(function (d) {
+      var img = d.querySelector('img');
+      if (img && !img.complete) img.addEventListener('load', pintarContraste);
+    });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { requestAnimationFrame(pintarContraste); });
+    }
+    addEventListener('load', pintarContraste);
+    pintarContraste();
   }
 
   /* ------------------------------- Testimonios ---------------------------- */

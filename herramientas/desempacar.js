@@ -191,6 +191,16 @@ cuerpo = cuerpo
   .replace('>[Nombre — pendiente]<', ' data-test-nombre>[Nombre — pendiente]<')
   .replace('>1 / 3<', ' data-test-contador>1 / 3<');
 
+// 2.8b Marca el titulo y el parrafo del hero para el efecto de contraste.
+//      El texto es azul oscuro y las fotos que pasan por detras traen una
+//      mancha del mismo azul: donde se encima, el texto desaparece. La clase
+//      la usa script.js para pintar de blanco solo esos pixeles.
+cuerpo = cuerpo
+  .replace('<h1 style="font-size:clamp(38px,5.2vw,60px)',
+           '<h1 class="contraste-hero" style="font-size:clamp(38px,5.2vw,60px)')
+  .replace('<p style="font-size:clamp(17px,2vw,19px);line-height:1.65;color:#54606f',
+           '<p class="contraste-hero" style="font-size:clamp(17px,2vw,19px);line-height:1.65;color:#54606f');
+
 // 2.9 ARREGLO A — en un celular de 375 px el boton del menu quedaba en el
 //     pixel 398, fuera de la pantalla, y el hero se cortaba por la derecha.
 //     Dos cambios que no alteran nada arriba de 470 px de ancho.
@@ -292,6 +302,28 @@ ${cssFuentes}
 /* ---- Estilos base: vienen tal cual del diseño aprobado ---- */
 ${cssBase}
 [hidden]{display:none !important}
+
+/* ---- Contraste del texto del hero sobre las fotos ----
+   El titulo y el parrafo son azul oscuro, y las fotos que van pasando traen
+   una mancha del MISMO azul: donde se encima, el texto se vuelve ilegible.
+
+   Con background-clip:text el texto se pinta con dos capas de fondo en vez
+   de con un color: abajo el color original, y encima una capa blanca
+   recortada por la silueta de las zonas oscuras de la foto. El recorte es
+   por pixel, asi que si el borde parte una letra a la mitad, esa letra queda
+   mitad blanca y mitad azul.
+
+   script.js es quien pone las imagenes y las alinea con la foto. Sin
+   JavaScript esta regla no llega a aplicarse y el texto se ve como siempre. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .contraste-hero.contraste-activo {
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* !important porque tiene que ganarle al color del style="" de la etiqueta */
+    color: transparent !important;
+    background-repeat: no-repeat;
+  }
+}
 
 /* ---- Efectos al pasar el mouse ----
    En el diseño venían como atributo style-hover="..."; aquí son CSS normal.
