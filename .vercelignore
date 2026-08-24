@@ -1,0 +1,13 @@
+# Lo que se queda en GitHub pero NO se publica en el sitio.
+
+# Fotos originales sin comprimir: son el respaldo, no hacen falta en la web.
+assets/originales/
+
+# Scripts y paginas de revision, solo para trabajar.
+herramientas/
+optimizar-imagenes.sh
+reporte-imagenes.txt
+
+# El export original de Claude Design (7.4 MB). Se conserva en el repo
+# como referencia, pero no tiene por que estar publico.
+Colegio Ninos Heroes.html

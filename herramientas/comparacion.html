@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revisión de calidad — antes y después</title>
+<style>
+  :root{ --azul:#2f557f; --vino:#8a2f43; --linea:#e2e8ef; }
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 32px 80px;font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#2b3440;background:#f4f6f9}
+  h1{font-size:26px;color:var(--azul);margin:0 0 6px}
+  .intro{max-width:820px;color:#5b6674}
+  .aviso{max-width:820px;background:#fff8e6;border:1px solid #f0dca8;border-left:4px solid #d9a441;padding:14px 18px;border-radius:8px;margin:18px 0 34px}
+  .tarjeta{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:22px;margin-bottom:26px}
+  .tarjeta h2{font-size:18px;color:var(--azul);margin:0 0 2px}
+  .meta{font-size:13px;color:#7e8a99;margin-bottom:18px}
+  .par{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .lado{min-width:0}
+  .etq{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7e8a99;margin-bottom:8px;display:flex;justify-content:space-between;gap:10px}
+  .etq b{color:var(--vino)}
+  .cuadros{background-color:#eef2f7;background-image:linear-gradient(45deg,#e2e8ef 25%,transparent 25%,transparent 75%,#e2e8ef 75%),linear-gradient(45deg,#e2e8ef 25%,transparent 25%,transparent 75%,#e2e8ef 75%);background-size:20px 20px;background-position:0 0,10px 10px}
+  .marco{border:1px solid var(--linea);border-radius:8px;overflow:hidden}
+  .marco img{display:block;width:100%;height:auto}
+  .lupa{height:330px;overflow:auto;border:1px solid var(--linea);border-radius:8px;cursor:grab}
+  .lupa.arrastrando{cursor:grabbing}
+  .lupa img{display:block;max-width:none;image-rendering:auto}
+  .ayuda{font-size:13px;color:#5b6674;margin:16px 0 8px;padding:10px 14px;background:#f0f4f9;border-radius:8px}
+  .nota{font-size:13px;color:#5b6674;margin-top:14px;padding-top:14px;border-top:1px dashed var(--linea)}
+  .ok{color:#1f7a4d;font-weight:700}
+  .barra{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--linea);padding:10px 32px;font-size:13px;color:#5b6674;display:flex;gap:22px;align-items:center;z-index:10}
+  .barra b{color:var(--azul)}
+</style>
+</head>
+<body>
+
+<h1>Revisión de calidad — antes y después</h1>
+<p class="intro">Izquierda: el archivo original tal como salió del diseño. Derecha: el que va a usar la página.
+En las <b>lupas</b> puedes arrastrar con el mouse para moverte por la imagen al 200 %; los dos lados se mueven
+juntos, así que siempre estás comparando exactamente el mismo pedazo. Ve a las caras, al pelo y al borde del
+recorte: ahí es donde primero se notaría un problema de compresión.</p>
+
+<div class="aviso">
+  <b>Por qué casi todas bajan más del 80 %:</b> no es que se comprimieran de más. Las fotos del hero estaban
+  guardadas en <b>PNG</b>, un formato pensado para logotipos y gráficos, no para fotografías: pesa muchísimo sin dar
+  mejor calidad. Pasarlas a WebP a calidad 92 da la misma imagen ocupando una décima parte. El logo baja porque lo
+  reduje 10 veces (se muestra a 150 px y medía 3200 px) y va <b>sin pérdida</b>: es matemáticamente idéntico al
+  original, no puede tener artefactos.
+</div>
+
+<div class="tarjeta" data-comp>
+  <h2>Hero 1 — tres alumnas</h2>
+  <div class="meta">PNG 1920 × 1080, 2021 KB &nbsp;→&nbsp; WebP calidad 92 con transparencia, 1800 × 1012, 207 KB &nbsp;·&nbsp; es la foto que se ve al abrir la página</div>
+  <div class="par">
+    <div class="lado"><div class="etq"><span>Original</span><b>2021 KB</b></div><div class="marco cuadros"><img src="../assets/originales/img/hero-1.png" alt="Original"></div></div>
+    <div class="lado"><div class="etq"><span>Optimizada</span><b>207 KB</b></div><div class="marco cuadros"><img src="../assets/img/hero-1.webp" alt="Optimizada"></div></div>
+  </div>
+  <div class="ayuda">🔍 Lupa al 200 % — arrastra para moverte. Los dos lados van sincronizados.</div>
+  <div class="par">
+    <div class="lado"><div class="lupa cuadros"><img src="../assets/originales/img/hero-1.png" width="3840" alt=""></div></div>
+    <div class="lado"><div class="lupa cuadros"><img src="../assets/img/hero-1.webp" width="3600" alt=""></div></div>
+  </div>
+</div>
+
+<div class="tarjeta" data-comp>
+  <h2>Hero 2 — alumnos con uniforme deportivo</h2>
+  <div class="meta">PNG 1440 × 1080, 1393 KB &nbsp;→&nbsp; WebP calidad 92 con transparencia, mismo tamaño, 176 KB</div>
+  <div class="par">
+    <div class="lado"><div class="etq"><span>Original</span><b>1393 KB</b></div><div class="marco cuadros"><img src="../assets/originales/img/hero-2.png" alt="Original"></div></div>
+    <div class="lado"><div class="etq"><span>Optimizada</span><b>176 KB</b></div><div class="marco cuadros"><img src="../assets/img/hero-2.webp" alt="Optimizada"></div></div>
+  </div>
+  <div class="ayuda">🔍 Lupa al 200 % — arrastra para moverte.</div>
+  <div class="par">
+    <div class="lado"><div class="lupa cuadros"><img src="../assets/originales/img/hero-2.png" width="2880" alt=""></div></div>
+    <div class="lado"><div class="lupa cuadros"><img src="../assets/img/hero-2.webp" width="2880" alt=""></div></div>
+  </div>
+  <div class="nota">No se redimensionó: 1440 px ya era exactamente lo que necesita la pantalla. Solo cambió el formato.</div>
+</div>
+
+<div class="tarjeta" data-comp>
+  <h2>Hero 3 — alumno con microscopio</h2>
+  <div class="meta">PNG 1440 × 1080, 1199 KB &nbsp;→&nbsp; WebP calidad 92 con transparencia, mismo tamaño, 136 KB</div>
+  <div class="par">
+    <div class="lado"><div class="etq"><span>Original</span><b>1199 KB</b></div><div class="marco cuadros"><img src="../assets/originales/img/hero-3.png" alt="Original"></div></div>
+    <div class="lado"><div class="etq"><span>Optimizada</span><b>136 KB</b></div><div class="marco cuadros"><img src="../assets/img/hero-3.webp" alt="Optimizada"></div></div>
+  </div>
+  <div class="ayuda">🔍 Lupa al 200 % — arrastra para moverte.</div>
+  <div class="par">
+    <div class="lado"><div class="lupa cuadros"><img src="../assets/originales/img/hero-3.png" width="2880" alt=""></div></div>
+    <div class="lado"><div class="lupa cuadros"><img src="../assets/img/hero-3.webp" width="2880" alt=""></div></div>
+  </div>
+  <div class="nota">No se redimensionó. Solo cambió el formato.</div>
+</div>
+
+<div class="tarjeta" data-comp>
+  <h2>Logo — Educación Adventista</h2>
+  <div class="meta">PNG 2994 × 3200, 232 KB &nbsp;→&nbsp; WebP <b>sin pérdida</b>, 300 × 321, 27 KB</div>
+  <div class="par">
+    <div class="lado"><div class="etq"><span>Original, a tamaño real del footer (150 px)</span><b>232 KB</b></div><div class="marco" style="padding:24px;text-align:center;background:#f6f8fb"><img src="../assets/originales/img/logo.png" alt="" style="height:150px;width:auto;display:inline-block"></div></div>
+    <div class="lado"><div class="etq"><span>Optimizado, a tamaño real del footer (150 px)</span><b>27 KB</b></div><div class="marco" style="padding:24px;text-align:center;background:#f6f8fb"><img src="../assets/img/logo.webp" alt="" style="height:150px;width:auto;display:inline-block"></div></div>
+  </div>
+  <div class="ayuda">🔍 Lupa al 200 % del tamaño en que se usa — arrastra para ver los bordes de las letras.</div>
+  <div class="par">
+    <div class="lado"><div class="lupa" style="height:300px;background:#f6f8fb"><img src="../assets/originales/img/logo.png" width="600" alt=""></div></div>
+    <div class="lado"><div class="lupa" style="height:300px;background:#f6f8fb"><img src="../assets/img/logo.webp" width="600" alt=""></div></div>
+  </div>
+  <div class="nota"><span class="ok">Sin pérdida:</span> el archivo optimizado es idéntico pixel por pixel al original reducido a 300 px. No hay compresión con pérdida de por medio, así que no puede haber artefactos. Lo único que cambió es que ya no cargamos una imagen de 3200 px de alto para mostrarla a 150.</div>
+</div>
+
+<div class="tarjeta">
+  <h2>Las otras 7 fotos — no se tocaron</h2>
+  <div class="meta">Niveles, fachada, instalaciones, admisiones y testimonios</div>
+  <p style="margin:0;color:#5b6674">Ya venían en WebP y al tamaño correcto. Volver a comprimir un WebP que ya está
+  comprimido agrega artefactos sin quitar peso — es como fotocopiar una fotocopia. Se copiaron tal cual, byte por
+  byte. <b>La calidad es exactamente la del diseño aprobado.</b></p>
+</div>
+
+<div class="barra">
+  <span>Total de imágenes: <b>5.26 MB → 1.33 MB</b></span>
+  <span>Lo que descarga un celular al abrir: <b>~640 KB</b></span>
+  <span>Fotos con rostros: <b>calidad 92</b> (el tope del rango)</span>
+</div>
+
+<script>
+// Sincroniza el desplazamiento de las dos lupas de cada tarjeta y permite
+// arrastrarlas con el mouse.
+document.querySelectorAll('[data-comp]').forEach(tarjeta => {
+  const lupas = [...tarjeta.querySelectorAll('.lupa')];
+  let bloqueado = false;
+
+  lupas.forEach(lupa => {
+    // Arranca centrado horizontalmente y un poco abajo del borde superior,
+    // que es donde suelen quedar las caras.
+    lupa.addEventListener('load', () => {}, true);
+    const centrar = () => {
+      lupa.scrollLeft = (lupa.scrollWidth - lupa.clientWidth) / 2;
+      lupa.scrollTop = Math.min(120, lupa.scrollHeight - lupa.clientHeight);
+    };
+    const img = lupa.querySelector('img');
+    if (img.complete) centrar(); else img.addEventListener('load', centrar);
+
+    lupa.addEventListener('scroll', () => {
+      if (bloqueado) return;
+      bloqueado = true;
+      for (const otra of lupas) {
+        if (otra === lupa) continue;
+        const px = lupa.scrollLeft / (lupa.scrollWidth - lupa.clientWidth || 1);
+        const py = lupa.scrollTop / (lupa.scrollHeight - lupa.clientHeight || 1);
+        otra.scrollLeft = px * (otra.scrollWidth - otra.clientWidth);
+        otra.scrollTop = py * (otra.scrollHeight - otra.clientHeight);
+      }
+      requestAnimationFrame(() => { bloqueado = false; });
+    });
+
+    let arrastrando = false, x0 = 0, y0 = 0, sl = 0, st = 0;
+    lupa.addEventListener('mousedown', e => {
+      arrastrando = true; lupa.classList.add('arrastrando');
+      x0 = e.clientX; y0 = e.clientY; sl = lupa.scrollLeft; st = lupa.scrollTop;
+      e.preventDefault();
+    });
+    addEventListener('mousemove', e => {
+      if (!arrastrando) return;
+      lupa.scrollLeft = sl - (e.clientX - x0);
+      lupa.scrollTop = st - (e.clientY - y0);
+    });
+    addEventListener('mouseup', () => { arrastrando = false; lupa.classList.remove('arrastrando'); });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<title>Imagen para compartir</title>
+<style>
+@font-face{font-family:'Outfit';font-weight:700;font-display:block;src:url("../assets/fonts/outfit-latin.woff2") format('woff2')}
+@font-face{font-family:'Outfit';font-weight:600;font-display:block;src:url("../assets/fonts/outfit-latin.woff2") format('woff2')}
+@font-face{font-family:'Mulish';font-weight:600;font-display:block;src:url("../assets/fonts/mulish-latin.woff2") format('woff2')}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1200px;height:630px;overflow:hidden}
+body{background:#fbfcfd;position:relative;font-family:'Mulish',sans-serif}
+.texto{position:absolute;left:64px;top:0;height:630px;width:660px;display:flex;flex-direction:column;justify-content:center;z-index:2}
+.marca{display:flex;align-items:center;gap:18px;margin-bottom:34px}
+.marca img{height:88px;width:auto;display:block}
+.marca span{font-family:'Outfit',sans-serif;font-weight:600;font-size:22px;line-height:1.2;color:#2f557f}
+.marca span small{display:block;font-weight:400;font-size:18px;color:#6b7a8c}
+h1{font-family:'Outfit',sans-serif;font-weight:700;font-size:56px;line-height:1.05;letter-spacing:-.02em;color:#2f557f}
+.raya{width:72px;height:5px;background:#8a2f43;border-radius:3px;margin:26px 0 22px}
+p{font-size:25px;line-height:1.4;color:#54606f;font-weight:600}
+.foto{position:absolute;right:-40px;bottom:0;width:660px;height:630px;z-index:1}
+.foto img{width:100%;height:100%;object-fit:contain;object-position:bottom right;display:block}
+</style>
+</head>
+<body>
+  <div class="texto">
+    <div class="marca">
+      <img src="../assets/img/logo.webp" alt="">
+      <span>Colegio Niños Héroes<small>de Chapultepec</small></span>
+    </div>
+    <h1>Primaria y Secundaria<br>en Apizaco</h1>
+    <div class="raya"></div>
+    <p>Formación en valores, grupos pequeños<br>y maestros que conocen a cada alumno.</p>
+  </div>
+  <div class="foto"><img src="../assets/img/hero-1.webp" alt=""></div>
+</body>
+</html>

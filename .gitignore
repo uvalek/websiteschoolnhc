@@ -1,0 +1,13 @@
+# Basura del sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Carpetas de herramientas que no usamos aqui
+node_modules/
+
+# Salidas temporales de los scripts
+reporte-imagenes.txt
+
+# OJO: /assets/originales/ NO se ignora a proposito.
+# Son las fotos sin comprimir y el repo es su unico respaldo.
