@@ -244,11 +244,9 @@ const ICONOS = {
 const entradas = JSON.parse(fs.readFileSync(path.join(RAIZ, 'contenido/blog.json'), 'utf8'));
 
 const tarjetas = entradas.map(e => `      <article style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10);display:flex;flex-direction:column">
-        <div style="height:190px;border-radius:14px;background:linear-gradient(135deg,#eef3f9 0%,#dbe6f3 100%);display:flex;align-items:center;justify-content:center">
-          <div style="width:104px;height:104px;border-radius:50%;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(47,85,127,.12)">
-            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS[e.icono]}</svg>
-          </div>
-        </div>
+        ${e.foto
+          ? `<div style="height:190px;border-radius:14px;overflow:hidden"><img src="assets/img/blog/${e.slug}-tarjeta.webp" alt="${e.foto.alt}" width="760" height="425" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block"></div>`
+          : `<div style="height:190px;border-radius:14px;background:linear-gradient(135deg,#eef3f9 0%,#dbe6f3 100%);display:flex;align-items:center;justify-content:center"><div style="width:104px;height:104px;border-radius:50%;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(47,85,127,.12)"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS[e.icono] || ICONOS.libro}</svg></div></div>`}
         <div style="padding:20px 10px 6px;display:flex;flex-direction:column;flex:1">
           <span style="font-size:13px;font-weight:700;color:#8a2f43;letter-spacing:.06em;text-transform:uppercase">${e.categoria}</span>
           <time datetime="${e.fechaISO}" style="font-size:13px;color:#6b7887;margin-top:8px">${e.fecha}</time>

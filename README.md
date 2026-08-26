@@ -139,6 +139,41 @@ entrada.
 
 3. Revisa `index.html` y `blog/index.html` y publica.
 
+> Si agregaste o cambiaste la **foto** de una entrada, corre antes
+> `python3 herramientas/fotos-blog.py` para descargarla y recortarla.
+
+### Las fotos
+
+Cada entrada lleva una foto, definida en el mismo `blog.json`:
+
+```json
+"foto": {
+  "pexels": 8055147,
+  "autor": "Annushka Ahuja",
+  "alt": "Descripción de lo que se ve en la foto",
+  "anclaje": 0.80
+}
+```
+
+- **`pexels`** es el número de la foto en pexels.com. El script la descarga sola.
+- **`anclaje`** decide qué parte de la foto se conserva al recortarla: `0` recorta
+  pegado a la orilla de arriba, `1` pegado a la de abajo, `0.5` al centro. Si al ver
+  el resultado la cara de alguien queda cortada, mueve este número.
+- Si una entrada **no trae foto**, la tarjeta usa un ícono de trazo. No se rompe.
+
+De cada foto se generan tres versiones: la de la tarjeta, la de arriba del artículo,
+y una en JPG de 1200×630 para cuando alguien comparte el link por WhatsApp.
+
+**Licencia:** son de **Pexels**, cuya licencia permite uso comercial y **no exige dar
+crédito**. Los autores quedan registrados de todos modos en
+`assets/originales/blog/CREDITOS.md`. Si vas a poner otra foto, asegúrate de que
+tenga una licencia igual de clara: una foto bajada de Google puede costarle una
+demanda al colegio.
+
+**Para usar fotos del propio colegio** en vez de banco de imágenes: deja el archivo
+en `assets/originales/blog/<slug>.jpg`, quita la línea `"pexels"` del JSON y corre
+el script; como el archivo ya existe, no lo vuelve a descargar y solo lo recorta.
+
 ### Detalles
 
 - **`slug`** es el nombre del archivo (`blog/<slug>.html`) y parte de la dirección.

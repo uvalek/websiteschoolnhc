@@ -62,6 +62,7 @@ main{max-width:760px;margin:0 auto;padding:56px 24px 24px}
 time{display:block;margin-top:8px;font-size:14px;color:#6b7887}
 h1{margin-top:14px;font-size:clamp(30px,4.6vw,44px);line-height:1.12;letter-spacing:-.02em;color:#2f557f;font-weight:700}
 .entrada{margin-top:20px;font-size:19px;line-height:1.6;color:#54606f}
+.portada{display:block;width:100%;height:auto;margin-top:30px;border-radius:18px}
 .regla{width:64px;height:4px;background:#8a2f43;border-radius:2px;margin:32px 0}
 article h2{margin-top:40px;font-size:26px;line-height:1.25;color:#2f557f;font-weight:700}
 article h3{margin-top:30px;font-size:19px;line-height:1.3;color:#2f557f;font-weight:600}
@@ -110,11 +111,20 @@ const ICONOS = {
   mochila: '<path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path><path d="M4 13h16"></path><path d="M9 20v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"></path>',
   reloj: '<circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M5 3 2 6"></path><path d="m22 6-3-3"></path><path d="M6.38 18.7 4 21"></path><path d="M17.64 18.67 20 21"></path>',
 };
+// La tapa de la tarjeta: la foto de la entrada. Si una entrada no trae foto
+// (por ejemplo una que agregues de prisa), cae de vuelta al icono de trazo.
+function tapa(e, prefijo) {
+  if (e.foto) {
+    return `<div class="tapa" style="overflow:hidden"><img src="${prefijo}assets/img/blog/${e.slug}-tarjeta.webp" alt="${esc(e.foto.alt)}" width="760" height="425" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block"></div>`;
+  }
+  return `<div class="tapa"><div><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS[e.icono] || ICONOS.libro}</svg></div></div>`;
+}
+
 const FLECHA = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>';
 const WA = 'https://wa.me/522212018998?text=' +
   encodeURIComponent('Hola, vi su página y quiero información sobre inscripciones.');
 
-function cabeza(titulo, desc, url, extra) {
+function cabeza(titulo, desc, url, extra, imgOG) {
   return `<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(titulo)}</title>
@@ -127,11 +137,11 @@ function cabeza(titulo, desc, url, extra) {
 <meta property="og:title" content="${esc(titulo)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${url}">
-<meta property="og:image" content="${SITIO}/assets/img/og.jpg">
+<meta property="og:image" content="${imgOG || SITIO + '/assets/img/og.jpg'}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="${SITIO}/assets/img/og.jpg">
+<meta name="twitter:image" content="${imgOG || SITIO + '/assets/img/og.jpg'}">
 <link rel="icon" href="../assets/icons/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -184,7 +194,7 @@ for (const e of entradas) {
     dateModified: e.fechaISO,
     inLanguage: 'es-MX',
     mainEntityOfPage: url,
-    image: `${SITIO}/assets/img/og.jpg`,
+    image: e.foto ? `${SITIO}/assets/img/blog/${e.slug}-og.jpg` : `${SITIO}/assets/img/og.jpg`,
     author: { '@type': 'Organization', name: 'Colegio Niños Héroes de Chapultepec' },
     publisher: {
       '@type': 'Organization',
@@ -196,7 +206,8 @@ for (const e of entradas) {
 <html lang="es-MX">
 <head>
 ${cabeza(e.titulo + ' | Colegio Niños Héroes de Chapultepec', e.resumen, url,
-  '<script type="application/ld+json">\n' + JSON.stringify(schema, null, 2) + '\n</script>')}
+  '<script type="application/ld+json">\n' + JSON.stringify(schema, null, 2) + '\n</script>',
+  e.foto ? `${SITIO}/assets/img/blog/${e.slug}-og.jpg` : null)}
 </head>
 <body>
 ${BARRA}
@@ -206,6 +217,7 @@ ${BARRA}
   <time datetime="${e.fechaISO}">${esc(e.fecha)}</time>
   <h1>${esc(e.titulo)}</h1>
   <p class="entrada">${esc(e.resumen)}</p>
+  ${e.foto ? `<img class="portada" src="../assets/img/blog/${e.slug}-portada.webp" alt="${esc(e.foto.alt)}" width="1520" height="690" fetchpriority="high" decoding="async">` : ''}
   <div class="regla"></div>
   <article>
 ${cuerpoHTML(e.cuerpo)}
@@ -228,7 +240,7 @@ ${PIE}
 
 // -------------------------------------------------------------- la lista
 const tarjetas = entradas.map(e => `      <article class="tarjeta">
-        <div class="tapa"><div><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS[e.icono]}</svg></div></div>
+        ${tapa(e, '../')}
         <div class="cuerpo-t">
           <span class="categoria" style="margin-top:0">${esc(e.categoria)}</span>
           <time datetime="${e.fechaISO}">${esc(e.fecha)}</time>
@@ -280,11 +292,9 @@ if (a === -1 || b === -1) {
 } else {
   const finLinea = portada.indexOf('-->', a) + 3;
   const tarjetasPortada = entradas.map(e => `      <article style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10);display:flex;flex-direction:column">
-        <div style="height:190px;border-radius:14px;background:linear-gradient(135deg,#eef3f9 0%,#dbe6f3 100%);display:flex;align-items:center;justify-content:center">
-          <div style="width:104px;height:104px;border-radius:50%;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(47,85,127,.12)">
-            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS[e.icono]}</svg>
-          </div>
-        </div>
+        ${e.foto
+          ? `<div style="height:190px;border-radius:14px;overflow:hidden"><img src="assets/img/blog/${e.slug}-tarjeta.webp" alt="${esc(e.foto.alt)}" width="760" height="425" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block"></div>`
+          : `<div style="height:190px;border-radius:14px;background:linear-gradient(135deg,#eef3f9 0%,#dbe6f3 100%);display:flex;align-items:center;justify-content:center"><div style="width:104px;height:104px;border-radius:50%;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(47,85,127,.12)"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS[e.icono] || ICONOS.libro}</svg></div></div>`}
         <div style="padding:20px 10px 6px;display:flex;flex-direction:column;flex:1">
           <span style="font-size:13px;font-weight:700;color:#8a2f43;letter-spacing:.06em;text-transform:uppercase">${esc(e.categoria)}</span>
           <time datetime="${e.fechaISO}" style="font-size:13px;color:#6b7887;margin-top:8px">${esc(e.fecha)}</time>

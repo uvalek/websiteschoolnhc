@@ -82,7 +82,13 @@
         "t": "p",
         "x": "Acompañar no es resolver. Es cuidar que haya un lugar con luz y sin distracciones, que la hora sea razonable, que no se salte la comida, y que sepa que si de verdad se atora, tiene a quién preguntarle. Lo demás —equivocarse, corregir, volver a intentar— es justo la parte que le toca a él, y es donde está el aprendizaje."
       }
-    ]
+    ],
+    "foto": {
+      "pexels": 8055147,
+      "autor": "Annushka Ahuja",
+      "alt": "Una niña hace su tarea en la mesa mientras su papá cocina cerca, en la cocina de casa",
+      "anclaje": 0.8
+    }
   },
   {
     "slug": "de-primaria-a-secundaria",
@@ -170,7 +176,13 @@
         "t": "p",
         "x": "El objetivo del primer año de secundaria no es que saque dieces. Es que aprenda a organizarse sin que nadie esté detrás de él. Eso le va a servir mucho más tiempo que cualquier calificación."
       }
-    ]
+    ],
+    "foto": {
+      "pexels": 8456129,
+      "autor": "Norma Mortenson",
+      "alt": "Dos estudiantes de secundaria conversan con sus mochilas y libros en el pasillo de una escuela",
+      "anclaje": 0.4
+    }
   },
   {
     "slug": "rutinas-de-sueno-y-desayuno",
@@ -240,6 +252,12 @@
         "t": "p",
         "x": "Y si después de dos o tres semanas con las rutinas ordenadas el problema sigue igual, entonces sí vale la pena buscar apoyo académico. Al menos ya sabrás que no era cansancio."
       }
-    ]
+    ],
+    "foto": {
+      "pexels": 8763023,
+      "autor": "Pavel Danilyuk",
+      "alt": "Dos niños desayunan cereal en la cocina mientras un adulto toma café",
+      "anclaje": 0.85
+    }
   }
 ]

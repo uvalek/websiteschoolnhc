@@ -32,6 +32,15 @@ asumir que el colegio las publicó. Antes de enseñárselo tienes tres caminos:
 Cuando el colegio empiece a escribir de verdad, se editan en `contenido/blog.json`
 y se corre `./actualizar-blog.sh`.
 
+**Las fotos son de banco de imágenes.** Vienen de Pexels, con licencia de uso
+comercial que no exige dar crédito, así que legalmente están bien y los autores
+quedan registrados en `assets/originales/blog/CREDITOS.md`. Pero **los niños de esas
+fotos no son alumnos del colegio.** Los textos alternativos que escribí dicen "una
+niña", "dos estudiantes" y no "nuestros alumnos", justo para no dar a entender lo
+que no es. Aun así, en cuanto el colegio te pase fotos propias de sus alumnos,
+conviene cambiarlas: se ven más creíbles y desaparece el tema por completo. El
+README explica cómo hacerlo sin tocar código.
+
 ## No bloquean, pero conviene
 
 | # | Qué falta | Nota |
