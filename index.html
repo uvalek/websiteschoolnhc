@@ -347,6 +347,46 @@ image-slot#admisiones-foto::part(frame){background:transparent}
 @media (max-width:1024px){.m-only{display:flex !important}.d-only{display:none !important}}
 [hidden]{display:none !important}
 
+/* ---- ARREGLO C: encuadre de la foto del hero en celular ----
+   La composicion del hero usa desplazamientos en pixeles fijos calculados
+   para escritorio. En una pantalla de 375 px el envoltorio arranca en
+   x = -122 y la primera foto en x = -219 con 900 px de ancho: las fotos
+   quedaban cortadas por la izquierda.
+
+   Aqui se anulan esos desplazamientos y la foto se acomoda al ancho real del
+   telefono, sangrando de orilla a orilla. Arriba de 1035 px no aplica nada de
+   esto: en escritorio el diseno queda exactamente igual. */
+@media (max-width: 1035px) {
+  .hero-media {
+    min-height: 0 !important;
+    max-width: none !important;
+    align-self: start !important;
+    justify-self: stretch !important;
+    width: calc(100% + 48px) !important;
+    margin: 0 -24px !important;
+    aspect-ratio: 4 / 3;
+  }
+  .hero-media > div { left: 0 !important; top: 0 !important; }
+  .hero-media [data-slide] { width: 100% !important; left: 0 !important; }
+  .hero-media [data-slide] img {
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+  }
+  /* Los 72 px de abajo del texto y los 48 px de separacion de la rejilla
+     existen para que en escritorio la foto se encime sobre el texto. En
+     celular la foto va debajo, asi que solo dejaban un hueco vacio. */
+  .hero-texto { padding-bottom: 0 !important; }
+  /* Una sola columna, fija. Sin esto el numero de columnas depende de como
+     cada navegador resuelva min(470px,100%) dentro de auto-fit, y hay
+     anchos donde unos ponen una columna y otros dos. */
+  #inicio > div {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+}
+
 /* ---- Contraste del texto del hero sobre las fotos ----
    El titulo y el parrafo son azul oscuro, y las fotos que van pasando traen
    una mancha del MISMO azul: donde se encima, el texto se vuelve ilegible.
@@ -431,7 +471,7 @@ image-slot#admisiones-foto::part(frame){background:transparent}
 
 <section id="inicio" data-screen-label="Hero" style="padding:132px 24px 0;background:#fbfcfd">
   <div data-carrusel-pausa data-carrusel-sigue style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(470px,100%),1fr));gap:48px;align-items:stretch">
-    <div style="position:relative;z-index:1;max-width:560px;display:flex;flex-direction:column;justify-content:center;padding-bottom:72px">
+    <div class="hero-texto" style="position:relative;z-index:1;max-width:560px;display:flex;flex-direction:column;justify-content:center;padding-bottom:72px">
       <h1 class="contraste-hero" style="font-size:clamp(38px,5.2vw,60px);line-height:1.06;color:#2f557f;font-weight:700;margin:0;letter-spacing:-.02em">Formamos personas íntegras para la vida</h1>
       <p class="contraste-hero" style="font-size:clamp(17px,2vw,19px);line-height:1.65;color:#54606f;margin:22px 0 0;max-width:500px">Un colegio donde cada niño y cada adolescente es conocido por su nombre. Acompañamos su aprendizaje y su formación en valores, de lunes a viernes de 8:00 a 14:00.</p>
       <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:34px">
@@ -443,7 +483,7 @@ image-slot#admisiones-foto::part(frame){background:transparent}
         <button data-punto="2" aria-label="Foto 3" style="width:11px;height:11px;padding:0;border-radius:50%;border:none;cursor:pointer;background:#c4cfdc"></button>
       </div>
     </div>
-   <div data-carrusel-pausa data-carrusel-sigue style="justify-self:center;align-self:stretch;width:100%;max-width:560px;min-height:460px;position:relative">
+   <div data-carrusel-pausa data-carrusel-sigue class="hero-media" style="justify-self:center;align-self:stretch;width:100%;max-width:560px;min-height:460px;position:relative">
     <div style="position: absolute; inset: 0; left: -146px; top: -170px">
       <div data-slide="0" style="position: absolute; inset: 0; transition: opacity .8s ease; opacity: 1; pointer-events: auto; width: 750px; left: 7px">
         <img src="assets/img/hero-1.webp" srcset="assets/img/hero-1-900.webp 900w, assets/img/hero-1.webp 1800w" sizes="(max-width: 1024px) 100vw, 900px" alt="Tres alumnas del Colegio Niños Héroes de Chapultepec sonriendo" width="1800" height="1012" fetchpriority="high" decoding="async" style="position: absolute; inset: 0; width: 120%; height: 100%; object-fit: contain; object-position: bottom center; display: block; left: -104px; right: -89px">

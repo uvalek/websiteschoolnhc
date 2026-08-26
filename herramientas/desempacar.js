@@ -201,6 +201,19 @@ cuerpo = cuerpo
   .replace('<p style="font-size:clamp(17px,2vw,19px);line-height:1.65;color:#54606f',
            '<p class="contraste-hero" style="font-size:clamp(17px,2vw,19px);line-height:1.65;color:#54606f');
 
+// 2.8c Marca la columna de la foto del hero. La composicion del hero esta
+//      calculada con desplazamientos en pixeles fijos (left:-146px,
+//      top:-170px, width:750px, left:-104px) pensados para escritorio; en un
+//      celular empujan la foto fuera de la pantalla por la izquierda. La
+//      clase permite anularlos solo en pantallas chicas.
+cuerpo = cuerpo
+  .replace(
+    'style="justify-self:center;align-self:stretch;width:100%;max-width:560px;min-height:460px;position:relative"',
+    'class="hero-media" style="justify-self:center;align-self:stretch;width:100%;max-width:560px;min-height:460px;position:relative"')
+  .replace(
+    'style="position:relative;z-index:1;max-width:560px;display:flex;flex-direction:column;justify-content:center;padding-bottom:72px"',
+    'class="hero-texto" style="position:relative;z-index:1;max-width:560px;display:flex;flex-direction:column;justify-content:center;padding-bottom:72px"');
+
 // 2.9 ARREGLO A — en un celular de 375 px el boton del menu quedaba en el
 //     pixel 398, fuera de la pantalla, y el hero se cortaba por la derecha.
 //     Dos cambios que no alteran nada arriba de 470 px de ancho.
@@ -302,6 +315,46 @@ ${cssFuentes}
 /* ---- Estilos base: vienen tal cual del diseño aprobado ---- */
 ${cssBase}
 [hidden]{display:none !important}
+
+/* ---- ARREGLO C: encuadre de la foto del hero en celular ----
+   La composicion del hero usa desplazamientos en pixeles fijos calculados
+   para escritorio. En una pantalla de 375 px el envoltorio arranca en
+   x = -122 y la primera foto en x = -219 con 900 px de ancho: las fotos
+   quedaban cortadas por la izquierda.
+
+   Aqui se anulan esos desplazamientos y la foto se acomoda al ancho real del
+   telefono, sangrando de orilla a orilla. Arriba de 1035 px no aplica nada de
+   esto: en escritorio el diseno queda exactamente igual. */
+@media (max-width: 1035px) {
+  .hero-media {
+    min-height: 0 !important;
+    max-width: none !important;
+    align-self: start !important;
+    justify-self: stretch !important;
+    width: calc(100% + 48px) !important;
+    margin: 0 -24px !important;
+    aspect-ratio: 4 / 3;
+  }
+  .hero-media > div { left: 0 !important; top: 0 !important; }
+  .hero-media [data-slide] { width: 100% !important; left: 0 !important; }
+  .hero-media [data-slide] img {
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+  }
+  /* Los 72 px de abajo del texto y los 48 px de separacion de la rejilla
+     existen para que en escritorio la foto se encime sobre el texto. En
+     celular la foto va debajo, asi que solo dejaban un hueco vacio. */
+  .hero-texto { padding-bottom: 0 !important; }
+  /* Una sola columna, fija. Sin esto el numero de columnas depende de como
+     cada navegador resuelva min(470px,100%) dentro de auto-fit, y hay
+     anchos donde unos ponen una columna y otros dos. */
+  #inicio > div {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+}
 
 /* ---- Contraste del texto del hero sobre las fotos ----
    El titulo y el parrafo son azul oscuro, y las fotos que van pasando traen

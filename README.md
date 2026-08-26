@@ -102,6 +102,24 @@ pierde, no se pueden regenerar con otra calidad.
 
 ---
 
+## El hero en celular
+
+La composición del hero (la foto encimada sobre el texto) está armada con
+desplazamientos en píxeles fijos —`left:-146px`, `top:-170px`, `width:750px`— que
+funcionan en escritorio pero en un celular empujaban la foto fuera de la pantalla por
+la izquierda: en 375 px la primera foto arrancaba en x = −219 con 900 px de ancho.
+
+En `index.html`, dentro de `@media (max-width: 1035px)`, esos desplazamientos se anulan
+y la foto se acomoda al ancho real del teléfono, de orilla a orilla y con proporción
+4:3. También se fuerza una sola columna, porque si no el número de columnas depende de
+cómo cada navegador interprete `min(470px,100%)` y hay anchos donde unos ponen una y
+otros dos.
+
+**Arriba de 1035 px no aplica nada de esto**: el diseño de escritorio queda exactamente
+igual al aprobado.
+
+---
+
 ## El texto del hero que cambia de color
 
 El título y el párrafo del inicio son azul oscuro, y las fotos que van pasando por
