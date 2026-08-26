@@ -110,6 +110,36 @@ var SEGUNDOS_POR_FOTO = 5;
     });
   }
 
+  /* ------------------- Aparición de bloques al bajar la página -------------
+     Los elementos marcados con data-anim empiezan invisibles y se
+     desvanecen hacia arriba cuando entran en pantalla. Se usa
+     IntersectionObserver, que el navegador resuelve solo: no cuesta nada
+     aunque la página sea larga.
+
+     Si la persona pidió "menos animaciones" en su sistema, no se hace nada:
+     el CSS ya deja todo visible en ese caso. */
+  var animables = [].slice.call(document.querySelectorAll('[data-anim]'));
+  var sinMovimiento = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (animables.length) {
+    if (sinMovimiento || !('IntersectionObserver' in window)) {
+      animables.forEach(function (el) { el.classList.add('a-visible'); });
+    } else {
+      var mirador = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('a-visible');
+          mirador.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.06 });
+      animables.forEach(function (el) { mirador.observe(el); });
+    }
+  }
+  // Le avisa al script del <head> que sí llegamos: ya no hace falta su
+  // red de seguridad.
+  window.__animacionesListas = true;
+
   /* --------------- Contraste del texto del hero sobre las fotos ------------
      El título y el párrafo son azul oscuro, y las fotos que van pasando traen
      una mancha del MISMO azul detrás: donde se encima, el texto no se lee.

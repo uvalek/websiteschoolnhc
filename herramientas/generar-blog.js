@@ -87,6 +87,29 @@ article li::marker{color:#8a2f43}
 .cuerpo-t p{font-size:15px;line-height:1.65;color:#54606f;margin-top:12px;flex:1}
 .leer{display:inline-flex;align-items:center;gap:8px;margin-top:20px;color:#8a2f43;font-weight:600;font-size:15px;align-self:flex-start}
 
+/* ---- Animaciones ----
+   El estado invisible cuelga de html.js-anim, que pone un script del <head>.
+   Sin JavaScript nunca se aplica y la página se ve completa. Se apaga si la
+   persona pidió "menos animaciones" en su sistema. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js-anim [data-anim]{opacity:0;transform:translateY(18px)}
+  html.js-anim [data-anim].a-visible{opacity:1;transform:none;
+    transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
+  html.js-anim [data-anim="2"].a-visible{transition-delay:.10s}
+  html.js-anim [data-anim="3"].a-visible{transition-delay:.20s}
+  .tarjeta{transition:transform .35s ease,box-shadow .35s ease}
+  .tarjeta img{transition:transform .6s cubic-bezier(.22,.61,.36,1)}
+  .tarjeta .leer svg{transition:transform .3s ease}
+  @media (hover:hover){
+    /* !important: la regla que revela (.a-visible{transform:none}) es mas
+       especifica y si no, la tarjeta nunca se levantaria */
+    .tarjeta:hover{transform:translateY(-5px) !important;box-shadow:0 20px 44px rgba(47,85,127,.18)}
+    .tarjeta:hover img{transform:scale(1.06)}
+    .tarjeta:hover .leer svg{transform:translateX(4px)}
+  }
+  article h2,article h3,article p,article ul,.portada,.cierre{}
+}
+
 footer{margin-top:72px;background:#f6f8fb;border-top:1px solid #e7ebf1;padding:44px 24px}
 .pie{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;font-size:15px;color:#66717f}
 .pie a{color:#66717f}
@@ -144,6 +167,10 @@ function cabeza(titulo, desc, url, extra, imgOG) {
 <meta name="twitter:image" content="${imgOG || SITIO + '/assets/img/og.jpg'}">
 <link rel="icon" href="../assets/icons/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+<script>
+(function(){var h=document.documentElement;h.className+=' js-anim';
+setTimeout(function(){if(!window.__animacionesListas)h.className=h.className.replace(' js-anim','');},3000);})();
+</script>
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/mulish-latin.woff2" as="font" type="font/woff2" crossorigin>
 ${extra || ''}
@@ -152,6 +179,30 @@ ${cssFuentes}
 </style>
 <style>${CSS}</style>`;
 }
+
+// Revela los bloques marcados con data-anim al entrar en pantalla, y avisa
+// que el JavaScript llegó para que el <head> no active su red de seguridad.
+const MIRADOR = `<script>
+(function () {
+  var el = [].slice.call(document.querySelectorAll('[data-anim]'));
+  var quieto = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (el.length) {
+    if (quieto || !('IntersectionObserver' in window)) {
+      el.forEach(function (n) { n.classList.add('a-visible'); });
+    } else {
+      var m = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('a-visible');
+          m.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.06 });
+      el.forEach(function (n) { m.observe(n); });
+    }
+  }
+  window.__animacionesListas = true;
+})();
+<\/script>`;
 
 const BARRA = `<header class="barra">
   <div class="barra-int">
@@ -217,12 +268,12 @@ ${BARRA}
   <time datetime="${e.fechaISO}">${esc(e.fecha)}</time>
   <h1>${esc(e.titulo)}</h1>
   <p class="entrada">${esc(e.resumen)}</p>
-  ${e.foto ? `<img class="portada" src="../assets/img/blog/${e.slug}-portada.webp" alt="${esc(e.foto.alt)}" width="1520" height="690" fetchpriority="high" decoding="async">` : ''}
+  ${e.foto ? `<img class="portada" data-anim="1" src="../assets/img/blog/${e.slug}-portada.webp" alt="${esc(e.foto.alt)}" width="1520" height="690" fetchpriority="high" decoding="async">` : ''}
   <div class="regla"></div>
   <article>
 ${cuerpoHTML(e.cuerpo)}
   </article>
-  <div class="cierre">
+  <div class="cierre" data-anim="1">
     <h2>¿Buscas colegio para tus hijos en Apizaco?</h2>
     <p>Somos una escuela de primaria y secundaria en Apizaco, Tlaxcala. Escríbenos y con gusto te damos informes.</p>
     <a href="${WA}" target="_blank" rel="noopener">
@@ -232,6 +283,7 @@ ${cuerpoHTML(e.cuerpo)}
   </div>
 </main>
 ${PIE}
+${MIRADOR}
 </body>
 </html>
 `;
@@ -239,7 +291,7 @@ ${PIE}
 }
 
 // -------------------------------------------------------------- la lista
-const tarjetas = entradas.map(e => `      <article class="tarjeta">
+const tarjetas = entradas.map((e, i) => `      <article class="tarjeta" data-anim="${(i % 3) + 1}">
         ${tapa(e, '../')}
         <div class="cuerpo-t">
           <span class="categoria" style="margin-top:0">${esc(e.categoria)}</span>
@@ -272,6 +324,7 @@ ${tarjetas}
   </div>
 </div>
 ${PIE}
+${MIRADOR}
 </body>
 </html>
 `);

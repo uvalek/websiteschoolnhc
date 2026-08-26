@@ -30,6 +30,18 @@
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="assets/icons/manifest.webmanifest">
 
+<script>
+/* Enciende las animaciones solo si el JavaScript corre. La red de seguridad:
+   si script.js no cargó en 3 segundos, se quita la clase y todo aparece. */
+(function () {
+  var h = document.documentElement;
+  h.className += ' js-anim';
+  setTimeout(function () {
+    if (!window.__animacionesListas) h.className = h.className.replace(' js-anim', '');
+  }, 3000);
+})();
+</script>
+
 <link rel="preload" href="assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/mulish-latin.woff2" as="font" type="font/woff2" crossorigin>
 
@@ -347,6 +359,58 @@ image-slot#admisiones-foto::part(frame){background:transparent}
 @media (max-width:1024px){.m-only{display:flex !important}.d-only{display:none !important}}
 [hidden]{display:none !important}
 
+/* ---- Animaciones ----
+   Dos cosas: los bloques aparecen con un desvanecimiento al llegar a la
+   pantalla, y las tarjetas se levantan un poco con un acercamiento a la foto
+   al pasar el mouse.
+
+   El estado inicial invisible cuelga de html.js-anim, que lo pone un script
+   diminuto en el <head>. Si el JavaScript está apagado o falla, esa clase
+   nunca se pone (o se quita sola a los 3 segundos) y la página se ve completa,
+   sin animación. Nunca puede quedarse en blanco esperando.
+
+   Y todo esto se apaga si la persona pidió "menos animaciones" en su sistema
+   operativo: hay gente a la que el movimiento le provoca mareo. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js-anim [data-anim] {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  html.js-anim [data-anim].a-visible {
+    opacity: 1;
+    transform: none;
+    transition: opacity .7s cubic-bezier(.22,.61,.36,1),
+                transform .7s cubic-bezier(.22,.61,.36,1);
+  }
+  html.js-anim [data-anim="2"].a-visible { transition-delay: .10s }
+  html.js-anim [data-anim="3"].a-visible { transition-delay: .20s }
+
+  /* Las fotos de las tarjetas y los circulos de Niveles */
+  .tarjeta { transition: transform .35s ease, box-shadow .35s ease }
+  .tarjeta img,
+  #nivel-primaria img, #nivel-secundaria img,
+  #admisiones-foto img, #testimonios-foto img {
+    transition: transform .6s cubic-bezier(.22,.61,.36,1);
+  }
+  @media (hover: hover) {
+    .tarjeta:hover {
+      /* Los dos !important son necesarios y por motivos distintos:
+         - la sombra, porque viene en el style="" de la etiqueta;
+         - el transform, porque la regla que revela el elemento
+           (html.js-anim [data-anim].a-visible { transform: none }) es más
+           específica que .tarjeta:hover y si no, gana ella y la tarjeta
+           nunca se levantaría. */
+      transform: translateY(-5px) !important;
+      box-shadow: 0 20px 44px rgba(47,85,127,.18) !important;
+    }
+    .tarjeta:hover img,
+    #nivel-primaria:hover img, #nivel-secundaria:hover img,
+    #admisiones-foto:hover img, #testimonios-foto:hover img { transform: scale(1.06) }
+    .tarjeta-blog:hover a svg { transform: translateX(4px) }
+  }
+  .tarjeta-blog a svg { transition: transform .3s ease }
+}
+
 /* ---- Menu de escritorio con 6 items ----
    Al agregar "Blog" el menu pasó de 5 a 6 enlaces. Entre 1025 y 1099 px eso
    ya no cabía: "Nuestro colegio" se partía en dos renglones y el logo se
@@ -513,15 +577,15 @@ header nav a { white-space: nowrap; }
 
 <section id="niveles" data-screen-label="Niveles" style="padding:88px 24px;background:linear-gradient(180deg,#2f557f 0%,#2f557f 38%,#4d6f95 55%,#8fa6c0 70%,#c8d5e3 82%,rgba(232,238,244,.3) 91%,rgba(255,255,255,.12) 100%)">
   <div style="max-width:1180px;margin:0 auto">
-    <h2 style="font-size:clamp(30px,4vw,44px);color:#ffffff;font-weight:700;letter-spacing:-.015em;text-align:center">Niveles</h2>
+    <h2 data-anim="1" style="font-size:clamp(30px,4vw,44px);color:#ffffff;font-weight:700;letter-spacing:-.015em;text-align:center">Niveles</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px;margin-top:44px">
-      <div style="padding:20px 0;display:flex;flex-direction:column;align-items:center">
+      <div data-anim="1" style="padding:20px 0;display:flex;flex-direction:column;align-items:center">
         <div style="position:relative;width:240px;height:240px">
           <div id="nivel-primaria" style="position:absolute;inset:0;overflow:hidden;border-radius:50%"><img src="assets/img/nivel-primaria.webp" alt="Alumno de primaria del colegio con el uniforme deportivo" width="480" height="480" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block"></div>
         </div>
         <span style="margin-top:28px;background:#2f557f;color:#ffffff;font-family:'Outfit',sans-serif;font-size:20px;font-weight:600;padding:12px 38px;border-radius:999px">Primaria</span>
       </div>
-      <div style="padding:20px 0;display:flex;flex-direction:column;align-items:center">
+      <div data-anim="2" style="padding:20px 0;display:flex;flex-direction:column;align-items:center">
         <div style="position:relative;width:240px;height:240px">
           <div id="nivel-secundaria" style="position:absolute;inset:0;overflow:hidden;border-radius:50%"><img src="assets/img/nivel-secundaria.webp" alt="Dos alumnas de secundaria del colegio" width="480" height="480" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block"></div>
         </div>
@@ -537,7 +601,7 @@ header nav a { white-space: nowrap; }
     <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.12) 0%,rgba(255,255,255,.12) 69%,rgba(255,255,255,1) 100%)"></div>
   </div>
   <div style="position:relative;max-width:1180px;margin:-9vw auto 0;padding:0 24px 96px">
-    <div style="max-width:820px">
+    <div data-anim="1" style="max-width:820px">
       <h2 style="font-size:clamp(28px,3.6vw,42px);color:#2f557f;font-weight:700;letter-spacing:-.015em">Quiénes somos</h2>
       <div style="width:64px;height:4px;background:#8a2f43;border-radius:2px;margin:18px 0 24px"></div>
       <p style="font-size:17px;line-height:1.75;color:#54606f">El Colegio Niños Héroes de Chapultepec es una escuela de primaria y secundaria en Apizaco, Tlaxcala. Recibimos a familias de la ciudad y de los municipios cercanos que buscan una educación cuidada, con maestros atentos y un ambiente tranquilo para estudiar.</p>
@@ -549,13 +613,13 @@ header nav a { white-space: nowrap; }
 
 <section data-screen-label="Instalaciones" style="background:#2f557f">
   <div style="padding:64px 24px 40px">
-    <div style="max-width:1180px;margin:0 auto;width:100%">
+    <div data-anim="1" style="max-width:1180px;margin:0 auto;width:100%">
       <h2 style="font-size:clamp(28px,3.6vw,42px);color:#ffffff;font-weight:700;letter-spacing:-.015em">Nuestras instalaciones</h2>
       <p style="font-size:17px;line-height:1.7;color:#dbe6f3;margin:16px 0 0;max-width:520px">Salones, áreas comunes y espacios al aire libre donde los alumnos pasan su jornada.</p>
     </div>
   </div>
   <div style="max-width:1180px;margin:0 auto;padding:0 24px 88px;position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px">
-    <div style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10)">
+    <div class="tarjeta" data-anim="1" style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10)">
       <div id="inst-primaria" style="width:100%;height:210px;overflow:hidden;border-radius:14px"><img src="assets/img/inst-primaria.webp" alt="Patio y salones del área de primaria del colegio" width="1048" height="590" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block"></div>
       <div style="padding:18px 12px 10px">
         <h3 style="font-size:18px;color:#2f557f;font-weight:600">Primaria</h3>
@@ -565,7 +629,7 @@ header nav a { white-space: nowrap; }
         </a>
       </div>
     </div>
-    <div style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10)">
+    <div class="tarjeta" data-anim="2" style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10)">
       <div id="inst-secundaria" style="width:100%;height:210px;overflow:hidden;border-radius:14px"><img src="assets/img/inst-secundaria.webp" alt="Laboratorio de ciencias del área de secundaria del colegio" width="1048" height="590" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block"></div>
       <div style="padding:18px 12px 10px">
         <h3 style="font-size:18px;color:#2f557f;font-weight:600">Secundaria</h3>
@@ -626,8 +690,8 @@ header nav a { white-space: nowrap; }
 
 <section id="blog" data-screen-label="Blog" style="padding:88px 24px;background:#ffffff">
   <div style="max-width:1180px;margin:0 auto">
-    <span style="display:block;font-size:15px;font-weight:600;color:#8a2f43;letter-spacing:.04em">De nuestro blog</span>
-    <h2 style="font-size:clamp(28px,3.6vw,42px);color:#2f557f;font-weight:700;letter-spacing:-.015em;margin-top:12px">Noticias y consejos para las familias</h2>
+    <span data-anim="1" style="display:block;font-size:15px;font-weight:600;color:#8a2f43;letter-spacing:.04em">De nuestro blog</span>
+    <h2 data-anim="1" style="font-size:clamp(28px,3.6vw,42px);color:#2f557f;font-weight:700;letter-spacing:-.015em;margin-top:12px">Noticias y consejos para las familias</h2>
     <p style="font-size:17px;line-height:1.75;color:#54606f;margin-top:16px;max-width:640px">Avisos del colegio, ideas para acompañar el estudio en casa y los temas que más nos preguntan los papás de primaria y secundaria.</p>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;margin-top:44px">
@@ -687,10 +751,10 @@ header nav a { white-space: nowrap; }
   <div style="max-width:1180px;margin:0 auto">
     <h2 style="font-size:clamp(28px,3.6vw,42px);color:#2f557f;font-weight:700;letter-spacing:-.015em">Ubicación y contacto</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:34px;margin-top:36px;align-items:stretch">
-      <div style="border-radius:24px;overflow:hidden;min-height:420px;border:1px solid #e2e8ef">
+      <div data-anim="1" style="border-radius:24px;overflow:hidden;min-height:420px;border:1px solid #e2e8ef">
         <iframe title="Mapa del colegio" src="https://www.google.com/maps?q=C.%20Barber%C3%A1n%20y%20Collar%201116%2C%20San%20Mart%C3%ADn%20de%20Porres%2C%2090300%20Apizaco%2C%20Tlaxcala&amp;output=embed" style="width:100%;height:100%;min-height:420px;border:0" loading="lazy"></iframe>
       </div>
-      <div style="background:#ffffff;border-radius:24px;padding:38px 34px;display:flex;flex-direction:column;gap:26px">
+      <div data-anim="2" style="background:#ffffff;border-radius:24px;padding:38px 34px;display:flex;flex-direction:column;gap:26px">
         <div style="display:flex;gap:16px">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8a2f43" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;margin-top:2px"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
           <div><h4 style="font-size:16px;color:#2f557f;font-weight:600;margin-bottom:6px">Dirección</h4><p style="font-size:16px;line-height:1.6;color:#5b6674">C. Barberán y Collar 1116, San Martín de Porres, 90300 Apizaco, Tlaxcala</p></div>

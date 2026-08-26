@@ -243,7 +243,7 @@ const ICONOS = {
 
 const entradas = JSON.parse(fs.readFileSync(path.join(RAIZ, 'contenido/blog.json'), 'utf8'));
 
-const tarjetas = entradas.map(e => `      <article style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10);display:flex;flex-direction:column">
+const tarjetas = entradas.map((e, i) => `      <article class="tarjeta tarjeta-blog" data-anim="${i + 1}" style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10);display:flex;flex-direction:column">
         ${e.foto
           ? `<div style="height:190px;border-radius:14px;overflow:hidden"><img src="assets/img/blog/${e.slug}-tarjeta.webp" alt="${e.foto.alt}" width="760" height="425" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block"></div>`
           : `<div style="height:190px;border-radius:14px;background:linear-gradient(135deg,#eef3f9 0%,#dbe6f3 100%);display:flex;align-items:center;justify-content:center"><div style="width:104px;height:104px;border-radius:50%;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(47,85,127,.12)"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS[e.icono] || ICONOS.libro}</svg></div></div>`}
@@ -262,8 +262,8 @@ const tarjetas = entradas.map(e => `      <article style="background:#ffffff;bor
 const seccionBlog = `
 <section id="blog" data-screen-label="Blog" style="padding:88px 24px;background:#ffffff">
   <div style="max-width:1180px;margin:0 auto">
-    <span style="display:block;font-size:15px;font-weight:600;color:#8a2f43;letter-spacing:.04em">De nuestro blog</span>
-    <h2 style="font-size:clamp(28px,3.6vw,42px);color:#2f557f;font-weight:700;letter-spacing:-.015em;margin-top:12px">Noticias y consejos para las familias</h2>
+    <span data-anim="1" style="display:block;font-size:15px;font-weight:600;color:#8a2f43;letter-spacing:.04em">De nuestro blog</span>
+    <h2 data-anim="1" style="font-size:clamp(28px,3.6vw,42px);color:#2f557f;font-weight:700;letter-spacing:-.015em;margin-top:12px">Noticias y consejos para las familias</h2>
     <p style="font-size:17px;line-height:1.75;color:#54606f;margin-top:16px;max-width:640px">Avisos del colegio, ideas para acompañar el estudio en casa y los temas que más nos preguntan los papás de primaria y secundaria.</p>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;margin-top:44px">
@@ -292,6 +292,39 @@ cuerpo = cuerpo
            '<a href="#blog" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654;border-bottom:1px solid #f0f3f7">Blog</a>\n      <a href="#contacto" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654">Contacto</a>')
   .replace('<a href="#nuestro-colegio" style="font-size:15px;color:#66717f">Quiénes somos</a>',
            '<a href="#nuestro-colegio" style="font-size:15px;color:#66717f">Quiénes somos</a>\n        <a href="#blog" style="font-size:15px;color:#66717f">Blog</a>');
+
+
+
+// ------------------------------------------- 2.12 MARCAS DE ANIMACION
+// data-anim = este elemento aparece con un desvanecimiento al llegar a la
+// pantalla. El numero es el turno, para que los grupos entren escalonados.
+// El estado inicial (invisible) SOLO se aplica si el JavaScript pudo correr,
+// asi que sin JavaScript la pagina se ve completa desde el primer momento.
+function marcar(txt, ancla, turnos) {
+  let i = 0;
+  return txt.split(ancla).reduce((acc, parte, idx, arr) => {
+    if (idx === 0) return parte;
+    const t = turnos[i % turnos.length]; i++;
+    return acc + ancla.replace('<div ', `<div data-anim="${t}" `)
+                      .replace('<h2 ', `<h2 data-anim="${t}" `) + parte;
+  });
+}
+
+// Niveles: el titulo y luego los dos circulos, uno tras otro
+cuerpo = marcar(cuerpo, '<h2 style="font-size:clamp(30px,4vw,44px);color:#ffffff;font-weight:700;letter-spacing:-.015em;text-align:center">', ['1']);
+cuerpo = marcar(cuerpo, '<div style="padding:20px 0;display:flex;flex-direction:column;align-items:center">', ['1', '2']);
+// Quienes somos
+cuerpo = marcar(cuerpo, '<div style="max-width:820px">', ['1']);
+// Instalaciones: el encabezado y las dos tarjetas
+cuerpo = marcar(cuerpo, '<div style="max-width:1180px;margin:0 auto;width:100%">', ['1']);
+cuerpo = marcar(cuerpo, '<div style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10)">', ['1', '2']);
+// Contacto: el mapa y la tarjeta de datos
+cuerpo = marcar(cuerpo, '<div style="border-radius:24px;overflow:hidden;min-height:420px;border:1px solid #e2e8ef">', ['1']);
+cuerpo = marcar(cuerpo, '<div style="background:#ffffff;border-radius:24px;padding:38px 34px;display:flex;flex-direction:column;gap:26px">', ['2']);
+
+// Las dos tarjetas de Instalaciones tambien llevan el efecto de acercamiento
+cuerpo = cuerpo.replace(/<div data-anim="([12])" style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba\(47,85,127,\.10\)">/g,
+  '<div class="tarjeta" data-anim="$1" style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10)">');
 
 
 // ------------------------------------------------------------ 3. armar el HTML
@@ -364,6 +397,18 @@ const html = `<!DOCTYPE html>
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="assets/icons/manifest.webmanifest">
 
+<script>
+/* Enciende las animaciones solo si el JavaScript corre. La red de seguridad:
+   si script.js no cargó en 3 segundos, se quita la clase y todo aparece. */
+(function () {
+  var h = document.documentElement;
+  h.className += ' js-anim';
+  setTimeout(function () {
+    if (!window.__animacionesListas) h.className = h.className.replace(' js-anim', '');
+  }, 3000);
+})();
+</script>
+
 <link rel="preload" href="assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/mulish-latin.woff2" as="font" type="font/woff2" crossorigin>
 
@@ -380,6 +425,58 @@ ${cssFuentes}
 /* ---- Estilos base: vienen tal cual del diseño aprobado ---- */
 ${cssBase}
 [hidden]{display:none !important}
+
+/* ---- Animaciones ----
+   Dos cosas: los bloques aparecen con un desvanecimiento al llegar a la
+   pantalla, y las tarjetas se levantan un poco con un acercamiento a la foto
+   al pasar el mouse.
+
+   El estado inicial invisible cuelga de html.js-anim, que lo pone un script
+   diminuto en el <head>. Si el JavaScript está apagado o falla, esa clase
+   nunca se pone (o se quita sola a los 3 segundos) y la página se ve completa,
+   sin animación. Nunca puede quedarse en blanco esperando.
+
+   Y todo esto se apaga si la persona pidió "menos animaciones" en su sistema
+   operativo: hay gente a la que el movimiento le provoca mareo. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js-anim [data-anim] {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  html.js-anim [data-anim].a-visible {
+    opacity: 1;
+    transform: none;
+    transition: opacity .7s cubic-bezier(.22,.61,.36,1),
+                transform .7s cubic-bezier(.22,.61,.36,1);
+  }
+  html.js-anim [data-anim="2"].a-visible { transition-delay: .10s }
+  html.js-anim [data-anim="3"].a-visible { transition-delay: .20s }
+
+  /* Las fotos de las tarjetas y los circulos de Niveles */
+  .tarjeta { transition: transform .35s ease, box-shadow .35s ease }
+  .tarjeta img,
+  #nivel-primaria img, #nivel-secundaria img,
+  #admisiones-foto img, #testimonios-foto img {
+    transition: transform .6s cubic-bezier(.22,.61,.36,1);
+  }
+  @media (hover: hover) {
+    .tarjeta:hover {
+      /* Los dos !important son necesarios y por motivos distintos:
+         - la sombra, porque viene en el style="" de la etiqueta;
+         - el transform, porque la regla que revela el elemento
+           (html.js-anim [data-anim].a-visible { transform: none }) es más
+           específica que .tarjeta:hover y si no, gana ella y la tarjeta
+           nunca se levantaría. */
+      transform: translateY(-5px) !important;
+      box-shadow: 0 20px 44px rgba(47,85,127,.18) !important;
+    }
+    .tarjeta:hover img,
+    #nivel-primaria:hover img, #nivel-secundaria:hover img,
+    #admisiones-foto:hover img, #testimonios-foto:hover img { transform: scale(1.06) }
+    .tarjeta-blog:hover a svg { transform: translateX(4px) }
+  }
+  .tarjeta-blog a svg { transition: transform .3s ease }
+}
 
 /* ---- Menu de escritorio con 6 items ----
    Al agregar "Blog" el menu pasó de 5 a 6 enlaces. Entre 1025 y 1099 px eso

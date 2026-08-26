@@ -103,6 +103,33 @@ pierde, no se pueden regenerar con otra calidad.
 
 ---
 
+## Las animaciones
+
+Los bloques aparecen con un desvanecimiento al llegar a la pantalla, y las tarjetas
+se levantan un poco con un acercamiento a la foto al pasar el mouse.
+
+Lo importante para ti: **están hechas para no poder romper la página.**
+
+- El estado inicial invisible depende de una clase (`js-anim`) que pone un script
+  diminuto en el `<head>`. Si el JavaScript está apagado, esa clase nunca se pone y
+  todo se ve normal desde el primer momento.
+- Si el JavaScript sí está encendido pero `script.js` falla o tarda, **a los 3
+  segundos la clase se quita sola** y todo aparece. Nunca se queda una sección en
+  blanco esperando.
+- Se apagan por completo si la persona activó "reducir movimiento" en su sistema
+  operativo. Hay gente a la que el movimiento en pantalla le provoca mareo.
+
+Para elegir qué se anima, se le pone el atributo `data-anim="1"` a un elemento en
+`index.html` (el número es el turno, para que un grupo entre escalonado: 1, 2, 3).
+Para quitarle la animación a algo, borra su `data-anim`. Para quitarlas todas, borra
+el `<script>` que está hasta arriba de `index.html`, el que dice
+`Enciende las animaciones`.
+
+**No se anima el título del hero** a propósito: ese texto lleva el efecto de
+contraste con la foto, y moverlo desalinearía la máscara.
+
+---
+
 ## El blog
 
 Todo el blog sale de **un solo archivo**: `contenido/blog.json`. De ahí se generan
