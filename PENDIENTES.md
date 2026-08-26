@@ -14,6 +14,24 @@ falso en la página del colegio cuesta la venta.
 Hoy los iconos de Facebook e Instagram llevan a la portada de esas redes, no a la
 página del colegio. Si el director hace clic, se nota.
 
+## ⚠️ Las 3 entradas del blog son contenido de ejemplo
+
+Las escribí yo para que la sección no se viera vacía. Son **consejos genéricos de
+educación**: no afirman nada sobre el colegio, no inventan logros, ni número de
+alumnos, ni certificaciones. Reviselas si quieres, están sanas en ese sentido.
+
+Pero **las fechas son inventadas** (agosto de 2026) y, si el director las lee, va a
+asumir que el colegio las publicó. Antes de enseñárselo tienes tres caminos:
+
+1. **Decírselo de frente:** "así se va a ver el blog, estos textos son de muestra".
+   Es lo que recomiendo; además abre la conversación de quién va a escribirlos.
+2. **Cambiarlas por textos del colegio**, si ya tienen algo publicado.
+3. **Quitar la sección** por ahora: borra el bloque `<section id="blog">` de
+   `index.html` y los enlaces "Blog" del menú.
+
+Cuando el colegio empiece a escribir de verdad, se editan en `contenido/blog.json`
+y se corre `./actualizar-blog.sh`.
+
 ## No bloquean, pero conviene
 
 | # | Qué falta | Nota |

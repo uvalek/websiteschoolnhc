@@ -229,6 +229,73 @@ cuerpo = cuerpo
 cuerpo = cuerpo.replace('width: 182px; height: 36px; position: absolute; left: 108px',
                         'width: 182px; height: 36px; position: absolute; left: 84px');
 
+
+// ---------------------------------------------------- 2.11 SECCION DEL BLOG
+// Las entradas viven en contenido/blog.json, que es tambien de donde
+// generar-blog.js saca las paginas de cada articulo: un solo lugar que
+// editar. Cuando exista el panel de administrador, esto se reemplaza por
+// datos de la base.
+const ICONOS = {
+  libro: '<path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>',
+  mochila: '<path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path><path d="M4 13h16"></path><path d="M9 20v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"></path>',
+  reloj: '<circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M5 3 2 6"></path><path d="m22 6-3-3"></path><path d="M6.38 18.7 4 21"></path><path d="M17.64 18.67 20 21"></path>',
+};
+
+const entradas = JSON.parse(fs.readFileSync(path.join(RAIZ, 'contenido/blog.json'), 'utf8'));
+
+const tarjetas = entradas.map(e => `      <article style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10);display:flex;flex-direction:column">
+        <div style="height:190px;border-radius:14px;background:linear-gradient(135deg,#eef3f9 0%,#dbe6f3 100%);display:flex;align-items:center;justify-content:center">
+          <div style="width:104px;height:104px;border-radius:50%;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(47,85,127,.12)">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS[e.icono]}</svg>
+          </div>
+        </div>
+        <div style="padding:20px 10px 6px;display:flex;flex-direction:column;flex:1">
+          <span style="font-size:13px;font-weight:700;color:#8a2f43;letter-spacing:.06em;text-transform:uppercase">${e.categoria}</span>
+          <time datetime="${e.fechaISO}" style="font-size:13px;color:#6b7887;margin-top:8px">${e.fecha}</time>
+          <h3 style="font-size:20px;line-height:1.28;color:#2f557f;font-weight:700;margin-top:12px">${e.titulo}</h3>
+          <p style="font-size:15px;line-height:1.65;color:#54606f;margin-top:12px;flex:1">${e.resumen}</p>
+          <a href="blog/${e.slug}.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;color:#8a2f43;font-weight:600;font-size:15px;align-self:flex-start">
+            Leer
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+        </div>
+      </article>`).join('\n');
+
+const seccionBlog = `
+<section id="blog" data-screen-label="Blog" style="padding:88px 24px;background:#ffffff">
+  <div style="max-width:1180px;margin:0 auto">
+    <span style="display:block;font-size:15px;font-weight:600;color:#8a2f43;letter-spacing:.04em">De nuestro blog</span>
+    <h2 style="font-size:clamp(28px,3.6vw,42px);color:#2f557f;font-weight:700;letter-spacing:-.015em;margin-top:12px">Noticias y consejos para las familias</h2>
+    <p style="font-size:17px;line-height:1.75;color:#54606f;margin-top:16px;max-width:640px">Avisos del colegio, ideas para acompañar el estudio en casa y los temas que más nos preguntan los papás de primaria y secundaria.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;margin-top:44px">
+      <!-- BLOG:INICIO — lo de aquí adentro lo escribe herramientas/generar-blog.js. No lo edites a mano: edita contenido/blog.json. -->
+${tarjetas}
+      <!-- BLOG:FIN -->
+    </div>
+
+    <div style="display:flex;justify-content:center;margin-top:48px">
+      <a href="blog/" data-hv="1" style="display:inline-flex;align-items:center;gap:10px;background:#2f557f;color:#ffffff;padding:16px 32px;border-radius:999px;font-weight:600;font-size:16px">
+        Ver todas las entradas
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+      </a>
+    </div>
+  </div>
+</section>
+`;
+
+cuerpo = cuerpo.replace('<section id="contacto"', seccionBlog + '\n<section id="contacto"');
+
+// Enlace "Blog" en el menu de escritorio, en el de celular y en el pie.
+cuerpo = cuerpo
+  .replace('<a href="#contacto" style="color:#2f557f" data-hv="0">Contacto</a>',
+           '<a href="#blog" style="color:#2f557f" data-hv="0">Blog</a>\n      <a href="#contacto" style="color:#2f557f" data-hv="0">Contacto</a>')
+  .replace('<a href="#contacto" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654">Contacto</a>',
+           '<a href="#blog" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654;border-bottom:1px solid #f0f3f7">Blog</a>\n      <a href="#contacto" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654">Contacto</a>')
+  .replace('<a href="#nuestro-colegio" style="font-size:15px;color:#66717f">Quiénes somos</a>',
+           '<a href="#nuestro-colegio" style="font-size:15px;color:#66717f">Quiénes somos</a>\n        <a href="#blog" style="font-size:15px;color:#66717f">Blog</a>');
+
+
 // ------------------------------------------------------------ 3. armar el HTML
 
 // OJO: cuando tengas el dominio definitivo, cambialo aqui y en sitemap.xml.
@@ -315,6 +382,16 @@ ${cssFuentes}
 /* ---- Estilos base: vienen tal cual del diseño aprobado ---- */
 ${cssBase}
 [hidden]{display:none !important}
+
+/* ---- Menu de escritorio con 6 items ----
+   Al agregar "Blog" el menu pasó de 5 a 6 enlaces. Entre 1025 y 1099 px eso
+   ya no cabía: "Nuestro colegio" se partía en dos renglones y el logo se
+   encogía. Se juntan un poco los enlaces SOLO en esa franja; de 1100 px para
+   arriba queda la separación original de 26 px del diseño. */
+header nav a { white-space: nowrap; }
+@media (min-width: 1025px) and (max-width: 1099px) {
+  header nav { gap: 16px !important; }
+}
 
 /* ---- ARREGLO C: encuadre de la foto del hero en celular ----
    La composicion del hero usa desplazamientos en pixeles fijos calculados

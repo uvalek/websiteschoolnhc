@@ -347,6 +347,16 @@ image-slot#admisiones-foto::part(frame){background:transparent}
 @media (max-width:1024px){.m-only{display:flex !important}.d-only{display:none !important}}
 [hidden]{display:none !important}
 
+/* ---- Menu de escritorio con 6 items ----
+   Al agregar "Blog" el menu pasó de 5 a 6 enlaces. Entre 1025 y 1099 px eso
+   ya no cabía: "Nuestro colegio" se partía en dos renglones y el logo se
+   encogía. Se juntan un poco los enlaces SOLO en esa franja; de 1100 px para
+   arriba queda la separación original de 26 px del diseño. */
+header nav a { white-space: nowrap; }
+@media (min-width: 1025px) and (max-width: 1099px) {
+  header nav { gap: 16px !important; }
+}
+
 /* ---- ARREGLO C: encuadre de la foto del hero en celular ----
    La composicion del hero usa desplazamientos en pixeles fijos calculados
    para escritorio. En una pantalla de 375 px el envoltorio arranca en
@@ -433,6 +443,7 @@ image-slot#admisiones-foto::part(frame){background:transparent}
       <a href="#nuestro-colegio" style="color:#2f557f" data-hv="0">Nuestro colegio</a>
       <a href="#niveles" style="color:#2f557f" data-hv="0">Niveles</a>
       <a href="#admisiones" style="color:#2f557f" data-hv="0">Admisiones</a>
+      <a href="#blog" style="color:#2f557f" data-hv="0">Blog</a>
       <a href="#contacto" style="color:#2f557f" data-hv="0">Contacto</a>
     </nav>
     <a class="d-only" href="https://wa.me/522212018998?text=Hola%2C%20vi%20su%20p%C3%A1gina%20y%20quiero%20informaci%C3%B3n%20sobre%20inscripciones." target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#2f557f;color:#ffffff;padding:13px 24px;border-radius:999px;font-weight:600;font-size:15px;flex:0 0 auto" data-hv="1">Solicita informes</a>
@@ -445,6 +456,7 @@ image-slot#admisiones-foto::part(frame){background:transparent}
       <a href="#nuestro-colegio" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654;border-bottom:1px solid #f0f3f7">Nuestro colegio</a>
       <a href="#niveles" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654;border-bottom:1px solid #f0f3f7">Niveles</a>
       <a href="#admisiones" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654;border-bottom:1px solid #f0f3f7">Admisiones</a>
+      <a href="#blog" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654;border-bottom:1px solid #f0f3f7">Blog</a>
       <a href="#contacto" data-accion="cerrar-menu" style="padding:12px 4px;color:#3c4654">Contacto</a>
       <a href="https://wa.me/522212018998?text=Hola%2C%20vi%20su%20p%C3%A1gina%20y%20quiero%20informaci%C3%B3n%20sobre%20inscripciones." target="_blank" rel="noopener" style="margin-top:14px;display:inline-flex;align-items:center;justify-content:center;gap:9px;background:#2f557f;color:#ffffff;padding:15px 24px;border-radius:999px;font-weight:600">Solicita informes</a>
     </div>
@@ -611,6 +623,78 @@ image-slot#admisiones-foto::part(frame){background:transparent}
 </section>
 
 
+
+<section id="blog" data-screen-label="Blog" style="padding:88px 24px;background:#ffffff">
+  <div style="max-width:1180px;margin:0 auto">
+    <span style="display:block;font-size:15px;font-weight:600;color:#8a2f43;letter-spacing:.04em">De nuestro blog</span>
+    <h2 style="font-size:clamp(28px,3.6vw,42px);color:#2f557f;font-weight:700;letter-spacing:-.015em;margin-top:12px">Noticias y consejos para las familias</h2>
+    <p style="font-size:17px;line-height:1.75;color:#54606f;margin-top:16px;max-width:640px">Avisos del colegio, ideas para acompañar el estudio en casa y los temas que más nos preguntan los papás de primaria y secundaria.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;margin-top:44px">
+      <!-- BLOG:INICIO — lo de aquí adentro lo escribe herramientas/generar-blog.js. No lo edites a mano: edita contenido/blog.json. -->
+      <article style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10);display:flex;flex-direction:column">
+        <div style="height:190px;border-radius:14px;background:linear-gradient(135deg,#eef3f9 0%,#dbe6f3 100%);display:flex;align-items:center;justify-content:center">
+          <div style="width:104px;height:104px;border-radius:50%;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(47,85,127,.12)">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          </div>
+        </div>
+        <div style="padding:20px 10px 6px;display:flex;flex-direction:column;flex:1">
+          <span style="font-size:13px;font-weight:700;color:#8a2f43;letter-spacing:.06em;text-transform:uppercase">Consejos para papás</span>
+          <time datetime="2026-08-18" style="font-size:13px;color:#6b7887;margin-top:8px">18 de agosto de 2026</time>
+          <h3 style="font-size:20px;line-height:1.28;color:#2f557f;font-weight:700;margin-top:12px">Cómo acompañar la tarea sin terminar haciéndola tú</h3>
+          <p style="font-size:15px;line-height:1.65;color:#54606f;margin-top:12px;flex:1">Cinco señales de que estás ayudando de más, y qué hacer en su lugar para que tu hijo aprenda a resolver solo.</p>
+          <a href="blog/acompanar-la-tarea-en-casa.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;color:#8a2f43;font-weight:600;font-size:15px;align-self:flex-start">
+            Leer
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+        </div>
+      </article>
+      <article style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10);display:flex;flex-direction:column">
+        <div style="height:190px;border-radius:14px;background:linear-gradient(135deg,#eef3f9 0%,#dbe6f3 100%);display:flex;align-items:center;justify-content:center">
+          <div style="width:104px;height:104px;border-radius:50%;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(47,85,127,.12)">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path><path d="M4 13h16"></path><path d="M9 20v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"></path></svg>
+          </div>
+        </div>
+        <div style="padding:20px 10px 6px;display:flex;flex-direction:column;flex:1">
+          <span style="font-size:13px;font-weight:700;color:#8a2f43;letter-spacing:.06em;text-transform:uppercase">Vida escolar</span>
+          <time datetime="2026-08-11" style="font-size:13px;color:#6b7887;margin-top:8px">11 de agosto de 2026</time>
+          <h3 style="font-size:20px;line-height:1.28;color:#2f557f;font-weight:700;margin-top:12px">El salto de primaria a secundaria: cómo prepararlo desde casa</h3>
+          <p style="font-size:15px;line-height:1.65;color:#54606f;margin-top:12px;flex:1">Más maestros, más materias y más responsabilidad. Qué cambia en ese primer año y cómo acompañar el cambio sin agobiar.</p>
+          <a href="blog/de-primaria-a-secundaria.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;color:#8a2f43;font-weight:600;font-size:15px;align-self:flex-start">
+            Leer
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+        </div>
+      </article>
+      <article style="background:#ffffff;border:1px solid #e7ebf1;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(47,85,127,.10);display:flex;flex-direction:column">
+        <div style="height:190px;border-radius:14px;background:linear-gradient(135deg,#eef3f9 0%,#dbe6f3 100%);display:flex;align-items:center;justify-content:center">
+          <div style="width:104px;height:104px;border-radius:50%;background:#ffffff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(47,85,127,.12)">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2f557f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M5 3 2 6"></path><path d="m22 6-3-3"></path><path d="M6.38 18.7 4 21"></path><path d="M17.64 18.67 20 21"></path></svg>
+          </div>
+        </div>
+        <div style="padding:20px 10px 6px;display:flex;flex-direction:column;flex:1">
+          <span style="font-size:13px;font-weight:700;color:#8a2f43;letter-spacing:.06em;text-transform:uppercase">Hábitos y bienestar</span>
+          <time datetime="2026-08-04" style="font-size:13px;color:#6b7887;margin-top:8px">4 de agosto de 2026</time>
+          <h3 style="font-size:20px;line-height:1.28;color:#2f557f;font-weight:700;margin-top:12px">Sueño y desayuno: lo que más pesa en el rendimiento escolar</h3>
+          <p style="font-size:15px;line-height:1.65;color:#54606f;margin-top:12px;flex:1">Antes de buscar clases extra, vale la pena revisar estas dos rutinas. Suelen explicar más de lo que uno cree.</p>
+          <a href="blog/rutinas-de-sueno-y-desayuno.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;color:#8a2f43;font-weight:600;font-size:15px;align-self:flex-start">
+            Leer
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+        </div>
+      </article>
+      <!-- BLOG:FIN -->
+    </div>
+
+    <div style="display:flex;justify-content:center;margin-top:48px">
+      <a href="blog/" data-hv="1" style="display:inline-flex;align-items:center;gap:10px;background:#2f557f;color:#ffffff;padding:16px 32px;border-radius:999px;font-weight:600;font-size:16px">
+        Ver todas las entradas
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section id="contacto" data-screen-label="Ubicación y contacto" style="padding:88px 24px;background:#f6f8fb">
   <div style="max-width:1180px;margin:0 auto">
     <h2 style="font-size:clamp(28px,3.6vw,42px);color:#2f557f;font-weight:700;letter-spacing:-.015em">Ubicación y contacto</h2>
@@ -655,6 +739,7 @@ image-slot#admisiones-foto::part(frame){background:transparent}
       <div style="display:flex;flex-direction:column;gap:12px">
         <h4 style="font-size:15px;color:#2f557f;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Acerca de</h4>
         <a href="#nuestro-colegio" style="font-size:15px;color:#66717f">Quiénes somos</a>
+        <a href="#blog" style="font-size:15px;color:#66717f">Blog</a>
       </div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <h4 style="font-size:15px;color:#2f557f;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Niveles</h4>

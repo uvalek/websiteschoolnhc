@@ -14,6 +14,7 @@ publica subiendo los cambios a GitHub.
 | El horario | `index.html` | `8:00 a 14:00` |
 | Cualquier texto | `index.html` | el texto tal como se ve en la página |
 | Los testimonios | `script.js` | `TESTIMONIOS` (hasta arriba) |
+| Las entradas del blog | `contenido/blog.json` | ver *El blog* abajo |
 | Facebook / Instagram | `index.html` | `facebook.com` / `instagram.com` |
 | Una foto | `assets/originales/img/` | ver *Cambiar una foto* abajo |
 
@@ -99,6 +100,62 @@ var MOSTRAR_TESTIMONIOS = true;   →   var MOSTRAR_TESTIMONIOS = false;
 **Importante:** nunca borres ni sobrescribas nada dentro de `assets/originales/`
 sin tener una copia. Esa carpeta es el respaldo de las fotos sin comprimir; si se
 pierde, no se pueden regenerar con otra calidad.
+
+---
+
+## El blog
+
+Todo el blog sale de **un solo archivo**: `contenido/blog.json`. De ahí se generan
+las tres tarjetas de la portada, la lista completa en `blog/` y la página de cada
+entrada.
+
+### Para agregar o cambiar una entrada
+
+1. Abre `contenido/blog.json` y edita (o copia y pega) un bloque:
+
+```json
+{
+  "slug": "titulo-corto-sin-acentos-ni-espacios",
+  "categoria": "Consejos para papás",
+  "fechaISO": "2026-09-15",
+  "fecha": "15 de septiembre de 2026",
+  "titulo": "El título como se ve en la página",
+  "resumen": "Dos renglones que aparecen en la tarjeta.",
+  "icono": "libro",
+  "cuerpo": [
+    { "t": "p",  "x": "Un párrafo." },
+    { "t": "h2", "x": "Un subtítulo grande" },
+    { "t": "h3", "x": "Un subtítulo chico" },
+    { "t": "ul", "x": ["Primer punto", "Segundo punto"] }
+  ]
+}
+```
+
+2. En la Terminal, dentro de la carpeta del proyecto:
+
+```bash
+./actualizar-blog.sh
+```
+
+3. Revisa `index.html` y `blog/index.html` y publica.
+
+### Detalles
+
+- **`slug`** es el nombre del archivo (`blog/<slug>.html`) y parte de la dirección.
+  Sin acentos, sin espacios, sin mayúsculas. Una vez publicada una entrada, **no lo
+  cambies**: quien la haya compartido se quedaría con un link roto.
+- **`fechaISO`** es para Google (siempre `AAAA-MM-DD`); **`fecha`** es la que ve la
+  gente. Cambia las dos.
+- **`icono`** solo acepta `libro`, `mochila` o `reloj`. Si quieres otro, pídemelo.
+- La portada muestra **las tres primeras** entradas del archivo. Si quieres que una
+  aparezca ahí, ponla hasta arriba.
+- El script **solo toca las tarjetas del blog** dentro de `index.html`, entre los
+  comentarios `BLOG:INICIO` y `BLOG:FIN`. Tus teléfonos, horarios y textos quedan
+  intactos aunque los hayas editado a mano. **No borres esos dos comentarios.**
+- Si agregas o quitas entradas, avísame para actualizar `sitemap.xml`.
+
+Cuando exista el panel de administrador, esto se reemplaza por la base de datos y
+`contenido/blog.json` y `herramientas/generar-blog.js` se pueden tirar.
 
 ---
 
@@ -225,6 +282,9 @@ desde *Deployments → … → Promote to Production* en el despliegue que sí f
 
 ```
 index.html      La página completa. Todo el texto vive aquí.
+blog/           Lista de entradas y una página por entrada (se generan)
+contenido/
+  blog.json     Las entradas del blog. Único lugar que editar.
 script.js       Carrusel del hero, menú de celular y testimonios. Nada más.
 assets/
   img/          Fotos optimizadas (las que usa la página)
